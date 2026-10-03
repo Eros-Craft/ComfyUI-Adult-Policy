@@ -108,6 +108,18 @@ cancelled. A separate Desktop run here would prove nothing that sweep does not.
 Qwen 2.1 measures whether 1.1.3 and 1.1.4 can be installed, then decides between holding and releasing 1.1.5, and
 says so before any merge.
 
+**D9. Real-photo edits stay on ✅ Consent; the policy is not changed to hold them** (2026-10-03, on the storefront
+orchestrator's report, relayed by the coordinator, that `eroscraft/CLAUDE.md` rule 3 holds explicit real-photo edits
+until "Consent in person" ships). Rule 3 says the opposite: "An explicit edit of a real photo runs on ✅ Consent
+(Paul, 2026-09-17)" (`eroscraft/CLAUDE.md:36`, workspace main `288a888`; the same in `.claude/rules/packages.md`,
+"Two gates", and `docs/pipeline.md:47`), and no branch of the workspace carries other wording. The design record
+agrees: D11 of `docs/superpowers/specs/2026-09-26-mac-cloud-package-design.md:30` keeps ✅ Consent required on every
+explicit path, a watermark on every output, and "Consent in person" as an optional feature. Rule 3 and `POLICY.md`
+("Changing this policy") both say the gates and rules move only on the owner's own words, which a relay is not. So
+`POLICY.md` stays as it is. If the owner decides to hold real-photo edits until in-person consent ships (the
+design names UK s.66I and asks for a lawyer's read before any sale, §7 of that spec), the change is a new stop in
+the JSON's messages and a refusal in each pack's engine, made in one PR here and then re-derived by every adopter.
+
 **D6. A policy README edit needs no version bump** (`POLICY.md`, "Changing this policy", bumps on a change to the
 policy): only the JSON and the reader are derived into packs, so a README edit leaves every adopter's copy equal.
 
