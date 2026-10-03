@@ -11,6 +11,9 @@ pull request that changes it is reviewed and merged in this repository, and each
 here. `python3 policy/test_policy.py` has to pass, and the checks run it on every pull request. A change may make a
 rule stricter or its message clearer; one that weakens a rule is declined ([policy/POLICY.md](../policy/POLICY.md)).
 
+**Testing in ComfyUI.** How a change is tested in ComfyUI Desktop and on Comfy Cloud, safe-for-work prompts only, is
+in [testing/TESTING.md](testing/TESTING.md).
+
 **Every test is safe for work.** Issues, pull requests, examples and tests carry no explicit content and never an
 image of a minor or of anyone who could be one. The gates and the two background rules are not up for removal; a
 change that weakens a check is declined however it is framed.
