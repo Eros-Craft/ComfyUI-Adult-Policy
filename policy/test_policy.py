@@ -203,6 +203,11 @@ def test_an_unlisted_workflow_names_its_medium():
     assert ap.load("eroscraft-image-creator-new-model", media="video").media == "video"
 
 
+def test_document_names_the_file_version():
+    first = (HERE / "POLICY.md").read_text(encoding="utf-8").split("Version ", 1)[1]
+    assert first.startswith(RAW["version"] + ","), "POLICY.md and the file name different versions"
+
+
 def test_no_em_dash_ships():
     dash = chr(0x2014)
     for path in HERE.iterdir():
