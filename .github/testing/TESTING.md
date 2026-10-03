@@ -74,9 +74,11 @@ or a "CI cannot"/"Cloud cannot" row with its reason.
 ## Settings, once (names only; a value never goes in a file)
 
 1. **Secret** `COMFY_API_KEY` (Settings, Secrets and variables, Actions, New repository secret): the key from
-   platform.comfy.org, for `comfy-cloud.yml`'s read-only Cloud rows. Without it those rows say "skipped".
-2. **Required check** `tests` on `main` (Settings, Rules, Rulesets): the one job that passes only when every test job
-   passed. `comfy-cloud` is never required: it answers for the Registry and Cloud, which a pull request cannot fix.
+   platform.comfy.org, for `comfy-cloud.yml`'s read-only Cloud rows. Until it is set those rows say "skipped: no
+   Comfy API key" and pass, and the parity run tests the newest ComfyUI release instead of Cloud's.
+2. **No required check on `main`.** The pack export (`publish_pack.py`) pushes each release straight to `main`, so a
+   ruleset that required `tests` would refuse every release. Read `tests` on the pull request instead: a red one is
+   not merged. `comfy-cloud` answers for the Registry and Cloud, which a pull request cannot fix, so it never gates.
 3. **Notifications**: a red nightly `tests` (a new ComfyUI release or master broke the pack) or a red Monday
    `comfy-cloud` (the Registry flagged a version, or Cloud moved its ComfyUI) emails the repository's watchers.
 

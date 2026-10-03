@@ -91,7 +91,8 @@ jobs:
           venue: ci
           artifact-name: smoke-${{ matrix.ref }}-${{ matrix.os }}
 
-  # The one name a ruleset requires: it passes only when every job above passed.
+  # One name to read on a pull request: it passes only when every job above passed. Not a required check, because the
+  # pack export pushes releases straight to main (.github/testing/TESTING.md, Settings).
   tests:
     if: ${{ always() }}
     needs: [policy, registry, comfyui]
