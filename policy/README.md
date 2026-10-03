@@ -1,41 +1,71 @@
-# The shared ErosCraft adult policy
+# The ErosCraft adult policy
 
-One policy for every ErosCraft workflow, in three files:
+One adult policy for every ErosCraft workflow, whatever model it runs. Nothing in the policy names a model: the
+gates, the rules, the questions and the stop sentences are the same for all of them, and each workflow is one entry
+under `workflows` saying which medium it makes and which checkpoints it has.
 
 | File | What it is |
 |---|---|
 | [`POLICY.md`](POLICY.md) | The policy in words: the two gates, the two rules, fail-closed, what is measured. |
-| [`eroscraft-adult-policy.json`](eroscraft-adult-policy.json) | The same policy for code: gates, rules, facts and their questions, the checker prompt, every stop sentence (image and video wording), the Civitai refusals. |
-| [`adult_policy.py`](adult_policy.py) | The reader. Standard library only. Refuses a file that weakens the policy, and resolves each message for the workflow's medium. |
+| [`eroscraft-adult-policy.json`](eroscraft-adult-policy.json) | The same policy for code: gates, rules, facts and their questions, the checker prompt, every stop sentence (image and video wording), the Civitai refusals, and the workflow list. |
+| [`adult_policy.py`](adult_policy.py) | The reader. Standard library only. Refuses a file that weakens the policy, applies a workflow's entry, and resolves each message for its medium. |
+| [`test_policy.py`](test_policy.py) | `python3 policy/test_policy.py`, no GPU and no ComfyUI. Proves the file equals the words the packs show today and that a weakened file or workflow entry is refused. |
 
-[`test_policy.py`](test_policy.py) proves the file says exactly what the Qwen 2.1 pack says today, word for word,
-and that a weakened copy is refused. `python3 policy/test_policy.py` runs it with no GPU and no ComfyUI.
+This folder is in `.comfyignore`, so the Qwen 2.1 node pack that is also published from this repository does not
+carry it until that pack adopts it.
 
-This folder is in `.comfyignore`, so it is not part of the Qwen 2.1 node pack on the Registry until that pack adopts
-it as below.
+## The workflows
 
-## What is shared and what is not
+| Workflow | Medium | Pack | Checkpoints | Words compared |
+|---|---|---|---|---|
+| `eroscraft-image-creator-qwen-2.1` | image | ComfyUI-Qwen21-Adult-Policy | request, rewrite, inputs, output | 2026-10-03, equal |
+| `eroscraft-video-creator-wan-2.2` | video | ComfyUI-Wan22-Adult-Policy | request, inputs, output | 2026-10-03, equal |
+| `eroscraft-video-creator-minimax-h3` | video | ComfyUI-H3-Adult-Policy | request, inputs, output | not yet |
+| `eroscraft-image-creator-krea-2` | image | ComfyUI-Krea2-Adult-Policy | request, rewrite, inputs, output | not yet |
+| `eroscraft-character-creator-krea-2` | image | ComfyUI-Krea2CC-Gate | request, inputs, output | not yet |
+| `eroscraft-image-creator-anima` | image | none yet (a stub) | request, inputs, output | not yet |
 
-**Shared** (in the file): the gates, the rules, the fact questions, the checker system prompt, the fail-closed
-reading, every stop sentence, the Civitai refused flags and words.
+"Not yet" means that workflow's pack has not been compared with the file, so its checkpoints above are a first
+guess its session confirms when it adopts. A new workflow adds its own row to `workflows` in the same change that
+wires it in.
 
-**Each workflow's own** (stays in its pack): the policy engine `policy.py` and its `verdict()`, which nodes check
-what, which model answers, the output folder, the Civitai host and base-model filter, recommended LoRAs and their
-sampling. The file supplies words; the decision to stop stays in the engine.
+## What a workflow may set, and what it may not
+
+**The policy, the same for all:** the two gates, the two rules and where each is checked, the fact questions, the
+checker system prompt, the fail-closed reading, every stop sentence, the Civitai refused flags and words.
+
+**A workflow's entry, optional:**
+
+- `media`: `image` or `video`, which picks the wording of every message that has two.
+- `checkpoints`: which of `request`, `rewrite`, `inputs`, `output` it runs. `request` and `output` are required of
+  every workflow; `rewrite` is required when it has a prompt enhancer, `inputs` when it takes photos or clips.
+- `messages`: a rewording of a stop sentence the policy already shows, when the medium's wording does not fit (a
+  trainer's proof render, say). It can only reword: a new stop, an empty sentence or one missing the workflow's
+  medium is refused.
+- `pack`, `civitai_picker`, `words_checked`: what the pack is called, whether it has the picker, when its words
+  were last compared.
+
+Anything else in an entry, such as `gates`, `rules`, `facts` or `fail_closed`, is refused, so no workflow can turn
+a check off for itself.
+
+**Each pack's own, outside this file:** the policy engine `policy.py` and its `verdict()`, which nodes check what,
+which model answers the questions, the output folder, the Civitai host and base-model filter, recommended LoRAs.
+The file supplies the words; the decision to stop stays in the engine.
 
 ## Wiring it into a workflow
 
-Every workflow already ships an adult pack (`ComfyUI-<Model>-Adult-Policy`) whose `policy.py` is generated from the
-shared engine by `_build/derive.py`. The shared policy rides the same step.
+Every workflow's adult pack (`ComfyUI-<Model>-Adult-Policy`) already has a `policy.py` generated from the shared
+engine by its `_build/derive.py`. The policy rides the same step.
 
-1. **Derive it in.** `derive.py` copies `eroscraft-adult-policy.json` and `adult_policy.py` into the pack folder
-   (`<pack>/<module>/`) beside `policy.py`, and lists both in `.claude/generated.txt` so the guard hook refuses a hand
-   edit. `derive.py --check` compares them byte for byte with this folder, as it already does for the engine.
-2. **Ship it.** Add both files to the script's `ZIP_EXTRA`, so the zip and `publish_pack.py` carry them.
-3. **Read it in `policies.py`.** Load once at import, for the pack's medium:
+1. **List it.** Add or confirm the workflow's row under `workflows`.
+2. **Derive it in.** `derive.py` copies `eroscraft-adult-policy.json` and `adult_policy.py` into the pack's module
+   folder beside `policy.py`, and lists both in `.claude/generated.txt` so the guard hook refuses a hand edit.
+   `derive.py --check` compares them byte for byte with the source, as it does for the engine.
+3. **Ship it.** Add both files to the script's `ZIP_EXTRA`, so the zip and `publish_pack.py` carry them.
+4. **Read it in `policies.py`**, once at import:
 
        from .adult_policy import load
-       SHARED = load(media="image")          # "video" for Wan 2.2 and MiniMax H3
+       SHARED = load("eroscraft-image-creator-qwen-2.1")      # the workflow's own folder name
 
        MINOR_TEXT = Fact("minor", SHARED.question("minor"))
        FAMOUS_TEXT = Fact("well_known_real_person", SHARED.question("well_known_real_person"))
@@ -48,30 +78,27 @@ shared engine by `_build/derive.py`. The shared policy rides the same step.
        gates_off, refused_words = SHARED.gates_off, SHARED.refused_words
 
    A missing or weakened file raises at import, so the pack does not load and nothing samples: fail closed.
-4. **Test it.** The suite asserts the pack's constants equal the file's (this folder's `_matches` is the check to
-   copy) and that `SHARED.version` is the one the handbook names.
-5. **Bump** the workflow's patch version in its seven places, rebuild the zip, and export the pack.
+5. **Test it.** The suite asserts the pack's constants equal the file's (`_matches` in `test_policy.py` is the check
+   to copy) and that `SHARED.version` is the one the handbook names.
+6. **Release.** The workflow's patch version in its seven places, the zip, then the pack's export.
 
-A workflow that only uses some checkpoints (no prompt enhancer, so no rewrite check) simply never shows the
-`rewrite` sentences. It may not drop a checkpoint the file lists for a rule it has inputs for.
+## The order
 
-## Qwen 2.1 adopts it first
+1. **Qwen 2.1 first.** Nothing changes for a person using it: every word in the file was copied from its
+   `qwen21_adult_policy/policies.py` and `civitai.py`, the test proves they are equal, and its pack carries its own
+   engine and loads alone. In its private repository, by the session that owns it: derive the two files into
+   `qwen21_adult_policy/`, replace the literal questions, stop sentences, gate sentences, `gates_off` and
+   `REFUSED_WORDS` in `policies.py` with reads from `load("eroscraft-image-creator-qwen-2.1")`, add both files to
+   `ZIP_EXTRA` and the suite, and release 1.1.5. `civitai.py` needs nothing: its flags and reasons already equal the
+   file's. The free tier of `_build/appe2e.py` should show every stop sentence unchanged.
+2. **Wan 2.2**, already compared equal on the video wording (`WAN22_POLICIES=... python3 policy/test_policy.py`).
+3. **MiniMax H3, Krea 2, the Character Creator**: each compares its words first. Where its sentence differs, either
+   the pack moves to the policy's wording or the workflow's entry rewords it, and the owner decides which.
+4. **Anima** wires it in when its pack is built, from the start.
 
-Qwen 2.1 goes first because nothing changes for a person using it: every word in the file was copied from its
-`qwen21_adult_policy/policies.py` and `civitai.py`, and `test_policy.py` proves they are equal today. Its pack also
-carries its own engine and loads alone, so it needs nothing from another pack. The Wan 2.2 wording was checked the
-same way against the workspace copy (`WAN22_POLICIES=... python3 policy/test_policy.py`).
+## Where this lives
 
-The steps, in the private `eroscraft-image-creator-qwen-2.1` repository, by the session that owns it:
-
-1. Put this folder where every workflow can derive from it (proposed: the workspace's `eroscraft/policy/`, next to
-   the shared engine's source) and have Qwen 2.1's `derive.py` copy the two files into `qwen21_adult_policy/`.
-2. In `policies.py`, replace the literal `MINOR_TEXT`, `FAMOUS_TEXT`, `STOPS`, `REWRITE_STOPS`, `OUTPUT_STOPS`,
-   `UNCLEAR`, `OUTPUT_UNCLEAR`, the three gate sentences, `gates_off` and `REFUSED_WORDS`/`refused_words` with reads
-   from `load(media="image")`, as in step 3 above. In `civitai.py` (generated), nothing changes: its
-   `REFUSED_FLAGS` and reasons already equal the file's, and the suite asserts it.
-3. Add the two files to `ZIP_EXTRA` and `.claude/generated.txt`; move `test_policy.py`'s checks into `suite.py`.
-4. Release 1.1.5: the seven version spots, the zip, then `publish_pack.py` exports the pack here and the Registry
-   publishes it. The free tier of `_build/appe2e.py` should show every stop sentence unchanged.
-
-Then Wan 2.2 and MiniMax H3 (`media="video"`), then Krea 2, Anima and the Character Creator, each by its own session.
+This repository is the home of the adult policy for all ErosCraft workflows, and `policy/` is its source. Each
+workflow's build reads it from here (a checkout beside the workspace, named by an environment variable in
+`eroscraft.env`, the way `COMFY_BASE` names the base) and copies it into its pack. The Qwen 2.1 node pack also
+published from this repository is an export, as `.github/CONTRIBUTING.md` says; this folder is not.

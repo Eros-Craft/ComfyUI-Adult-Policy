@@ -4,8 +4,9 @@ Version 0.1.0, draft. The machine-readable copy is [`eroscraft-adult-policy.json
 this page and the file differ, the file is what runs and this page is wrong.
 
 **18+ only.** Every ErosCraft workflow makes erotic and fantasy pictures and videos for adults, made by the person
-who asks for them. This policy is the same for all of them: the Qwen 2.1, Krea 2, Anima, Wan 2.2 and MiniMax H3
-creators and the Krea 2 Character Creator. A workflow may add checks. It may never remove or soften one below.
+who asks for them. This policy is the same for all of them, whatever model a workflow runs; the file lists each
+workflow, with its medium (image or video) and its checkpoints. A workflow may add checks and may reword a stop
+sentence to fit what it makes. It may never remove or soften anything below.
 
 ## Two gates
 

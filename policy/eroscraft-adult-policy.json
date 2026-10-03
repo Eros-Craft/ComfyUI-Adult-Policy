@@ -133,5 +133,50 @@
       "non-consensual", "nonconsensual", "rape"
     ],
     "checked": ["search", "download"]
+  },
+
+  "workflows": {
+    "eroscraft-image-creator-qwen-2.1": {
+      "media": "image",
+      "pack": "ComfyUI-Qwen21-Adult-Policy",
+      "checkpoints": ["request", "rewrite", "inputs", "output"],
+      "civitai_picker": true,
+      "words_checked": "2026-10-03"
+    },
+    "eroscraft-video-creator-wan-2.2": {
+      "media": "video",
+      "pack": "ComfyUI-Wan22-Adult-Policy",
+      "checkpoints": ["request", "inputs", "output"],
+      "civitai_picker": false,
+      "words_checked": "2026-10-03"
+    },
+    "eroscraft-video-creator-minimax-h3": {
+      "media": "video",
+      "pack": "ComfyUI-H3-Adult-Policy",
+      "checkpoints": ["request", "inputs", "output"],
+      "civitai_picker": false,
+      "words_checked": null
+    },
+    "eroscraft-image-creator-krea-2": {
+      "media": "image",
+      "pack": "ComfyUI-Krea2-Adult-Policy",
+      "checkpoints": ["request", "rewrite", "inputs", "output"],
+      "civitai_picker": true,
+      "words_checked": null
+    },
+    "eroscraft-character-creator-krea-2": {
+      "media": "image",
+      "pack": "ComfyUI-Krea2CC-Gate",
+      "checkpoints": ["request", "inputs", "output"],
+      "civitai_picker": false,
+      "words_checked": null
+    },
+    "eroscraft-image-creator-anima": {
+      "media": "image",
+      "pack": null,
+      "checkpoints": ["request", "inputs", "output"],
+      "civitai_picker": false,
+      "words_checked": null
+    }
   }
 }
