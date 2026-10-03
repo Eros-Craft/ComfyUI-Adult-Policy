@@ -152,49 +152,70 @@ FACT_SYSTEM = ("You are a strict content classifier. For each labelled question,
                "'key: no', in the order given, and nothing else.")
 
 
+# A key, then its value: the key as a whole word (markdown bold or backticks around it allowed), a colon, an equals
+# sign, a dash or a space, then the rest of the line. The reader before this one took the first place a key appeared,
+# as a substring, and the first word after it, so "minor: no idea" read as a clear no, a later "minor: yes" for the
+# same key (one line per frame or photo, say) was never read, and "not_a_minor: no" answered "minor". All three failed
+# open; found on 2026-10-03 while the Qwen 2.1 app synced its policy with Krea 2's, whose reader this is.
+def _answer_re(key: str) -> re.Pattern:
+    return re.compile(r"(?<![a-z0-9_])%s(?![a-z0-9_])[*`]*\s*[:=-]?\s*[*`]*([a-z]+)([^\n]*)" % re.escape(key.lower()))
+
+
+def _one_value(word: str, rest: str) -> Optional[bool]:
+    """True for exactly "yes", False for exactly "no", None for anything else.
+
+    The value is the whole rest of the line, with its whitespace, markdown emphasis (* and `) and ONE trailing
+    full stop removed, so "No." and "**no**" are a no. "no (but unsure)", "no / yes", "no?", "no, nobody",
+    "no.." and an empty value are not an answer, and fail closed (2026-10-03: the reader before this one took
+    the first word, so the first three of those read as a clear no)."""
+    value = (word + rest).strip().strip("*`").strip()
+    if value.endswith("."):
+        value = value[:-1]
+    return {"yes": True, "no": False}.get(value)
+
+
+def _plain_answer(answer: Optional[str], key: str) -> Optional[bool]:
+    """The one plain yes or no `key` was answered with every place it appears, or None (missing, hedged, or two
+    places that disagree)."""
+    low = (answer or "").lower()
+    values = {_one_value(m.group(1), m.group(2)) for m in _answer_re(key).finditer(low)}
+    return values.pop() if len(values) == 1 and None not in values else None
+
+
 def parse_answer(answer: Optional[str], facts: tuple[Fact, ...]) -> dict[str, bool]:
     """Read one batched answer block into clean booleans, FAILING CLOSED.
 
     `answer` is None when the model gave none (R4: no closing `</think>`), which makes every fact
-    unsafe. A label that is missing, or whose value is neither yes nor no, is unsafe too.
+    unsafe. A fact gets the value its key was answered with only when EVERY place the key appears
+    answers the same bare yes or no; a missing key, a hedge, or two lines that disagree give the
+    fact's unsafe value.
     """
     out: dict[str, bool] = {}
-    low = (answer or "").lower()
     for f in facts:
-        value = None
-        i = low.find(f.key.lower())
-        if i >= 0:
-            tail = low[i + len(f.key):].lstrip(" :\t")
-            word = re.match(r"[a-z]+", tail)          # a whole word: "not sure" and "none" are not a no
-            word = word.group(0) if word else ""
-            if word == "no":
-                value = False
-            elif word == "yes":
-                value = True
+        value = _plain_answer(answer, f.key)
         out[f.key] = f.unsafe if value is None else value      # unknown -> unsafe
     return out
+
+
+def clear_keys(answer: Optional[str], facts: tuple[Fact, ...]) -> set:
+    """The facts answered with a bare, consistent yes or no, found exactly as `parse_answer` finds them: the only
+    ones a stop message may name."""
+    return {f.key for f in facts if _plain_answer(answer, f.key) is not None}
 
 
 def parse_facts(raw: dict[str, Optional[str]], facts: tuple[Fact, ...]) -> dict[str, bool]:
     """Turn one thinking-on answer set into clean booleans, FAILING CLOSED.
 
-    `raw` maps a fact key to the model's cleaned answer string (or None). A "no" is the only way to
-    get the safe value; a missing key, an empty/unparseable answer, or anything that isn't a clear
-    negative is read as the fact's `unsafe` value. `nodes.py` is responsible for stripping the
-    `</think>` block before calling here, and for treating an answer with no closing `</think>` as
-    None (the test-cast spec's R4).
+    `raw` maps a fact key to the model's cleaned answer string (or None). A bare "no" is the only way
+    to get the safe value; a missing key, an empty answer, or anything else ("no idea", "no?", "n") is
+    read as the fact's `unsafe` value. `nodes.py` is responsible for stripping the `</think>` block
+    before calling here, and for treating an answer with no closing `</think>` as None (the test-cast
+    spec's R4).
     """
     out: dict[str, bool] = {}
     for f in facts:
-        answer = (raw.get(f.key) or "").strip().lower()
-        word = re.match(r"[a-z]+", answer)
-        word = word.group(0) if word else ""
-        is_no = word in ("no", "n")               # a whole word: "not sure" and "none seen" are not a no
-        is_yes = word in ("yes", "y")
-        if is_no and not is_yes:
-            out[f.key] = not f.unsafe             # the safe value
-        else:
-            out[f.key] = f.unsafe                 # yes, or anything unclear -> fail closed
+        value = _one_value("", (raw.get(f.key) or "").lower())      # the whole answer: only "no" is a no
+        out[f.key] = not f.unsafe if value is False else f.unsafe     # yes, or anything unclear -> fail closed
     return out
 
 
