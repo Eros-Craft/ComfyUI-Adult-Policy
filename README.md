@@ -4,6 +4,9 @@
 
 ErosCraft's content policy for a Qwen Image 2.1 workflow, and the only place adult text exists in this package.
 
+This repository is also the home of the [ErosCraft adult policy](policy/README.md) that every ErosCraft workflow
+shares, whatever model it runs. The node pack below is its first adopter.
+
 | Node | What it does |
 |---|---|
 | 🔞 ErosCraft policy | The two gates, ✅ Consent and 🔞 18+, and the policy they unlock. Both ship off. |

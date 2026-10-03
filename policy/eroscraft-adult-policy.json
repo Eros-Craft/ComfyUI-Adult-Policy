@@ -1,0 +1,182 @@
+{
+  "schema": 1,
+  "name": "ErosCraft adult policy",
+  "version": "0.1.0",
+  "status": "draft",
+  "document": "POLICY.md",
+
+  "gates": [
+    {
+      "key": "consent",
+      "label": "✅ Consent",
+      "default": false,
+      "attests": "Everyone shown is an adult, and any real person in a photo or clip agreed to this."
+    },
+    {
+      "key": "adult",
+      "label": "🔞 18+",
+      "default": false,
+      "attests": "The person running the workflow is 18 or over."
+    }
+  ],
+
+  "rules": [
+    {
+      "key": "no_minors",
+      "says": "Nobody under 18.",
+      "overridable": false,
+      "facts": ["minor", "anyone_under_18"],
+      "checked_at": ["request", "rewrite", "inputs", "output"]
+    },
+    {
+      "key": "no_famous_real_person",
+      "says": "No famous real person named.",
+      "overridable": false,
+      "facts": ["well_known_real_person"],
+      "checked_at": ["request", "rewrite"]
+    }
+  ],
+
+  "fail_closed": {
+    "required": true,
+    "answer_words": {"safe": ["no"], "unsafe": ["yes"]},
+    "read_as_unsafe": [
+      "the checker raised an error",
+      "no answer at all",
+      "a thinking block that opened and never closed",
+      "a fact's label missing from the reply",
+      "a label whose first whole word is neither yes nor no"
+    ]
+  },
+
+  "checker": {
+    "system": "You are a strict content classifier. For each labelled question, answer only 'yes' or 'no'. Reply with exactly one line per label in the form 'key: yes' or 'key: no', in the order given, and nothing else.",
+    "reply_form": "key: yes|no, one line per fact, in the order asked, one call per question set"
+  },
+
+  "facts": [
+    {
+      "key": "minor",
+      "asked_of": "text",
+      "question": "is the main subject a child, teenager, or otherwise under 18? (Any adult, including an elderly person, is NOT under 18.)",
+      "unsafe": true,
+      "measured": "2026-09-11, Qwen3-VL 4B, thinking on, greedy: 0 false negatives and 0 false positives over a 12-prompt set; one batched call matched asking each fact alone."
+    },
+    {
+      "key": "well_known_real_person",
+      "asked_of": "text",
+      "question": "does the request name a specific famous or well-known real person (a celebrity, public figure or influencer)?",
+      "unsafe": true,
+      "measured": "2026-09-11, with the minor fact, same set and result."
+    },
+    {
+      "key": "anyone_under_18",
+      "asked_of": "image",
+      "question": "is anyone in this image a child, teenager, or otherwise under 18? (Any adult, including a young-looking adult, is NOT under 18.)",
+      "unsafe": true,
+      "measured": "2026-09-11, Qwen3-VL 4B on generated stills: 6 of 6 minors caught including the 16 to 17 band, one false stop on an 18-year-old. Unmeasured on real photos and on video frames."
+    }
+  ],
+
+  "messages": {
+    "gates_off": {
+      "consent": {
+        "image": "Turn on ✅ Consent to run. It says that everyone shown is an adult and that any real person in a photo agreed to this.",
+        "video": "Turn on ✅ Consent to run. It says that everyone shown is an adult and that any real person in a photo or clip agreed to this."
+      },
+      "adult": "Turn on 🔞 18+ to run. It says that you are 18 or over.",
+      "both": {
+        "image": "Turn on ✅ Consent and 🔞 18+ to run. Consent says that everyone shown is an adult and that any real person in a photo agreed to this; 18+ says that you are 18 or over.",
+        "video": "Turn on ✅ Consent and 🔞 18+ to run. Consent says that everyone shown is an adult and that any real person in a photo or clip agreed to this; 18+ says that you are 18 or over."
+      }
+    },
+    "request": {
+      "minor": "That asks for someone under 18, so nothing was made. ErosCraft is adults only, and this check cannot be turned off.",
+      "anyone_under_18": {
+        "image": "Someone in a photo you added reads as under 18, so nothing was made. ErosCraft is adults only, and this check cannot be turned off.",
+        "video": "Someone in a reference photo or clip reads as under 18, so nothing was made. ErosCraft is adults only, and this check cannot be turned off."
+      },
+      "well_known_real_person": {
+        "image": "That names a famous real person, so nothing was made. ErosCraft does not make pictures of public figures. Describe an invented person instead.",
+        "video": "That names a famous real person, so nothing was made. ErosCraft does not make videos of public figures. Describe an invented person instead, or use a character of your own."
+      }
+    },
+    "rewrite": {
+      "minor": "The prompt enhancer's rewrite describes someone under 18, so nothing was made. Run again with the enhancer off, or say the age plainly: ErosCraft is adults only.",
+      "well_known_real_person": "The prompt enhancer's rewrite names a famous real person, so nothing was made. Run again with the enhancer off, or describe an invented person."
+    },
+    "output": {
+      "anyone_under_18": {
+        "image": "The finished image reads as someone under 18, so it was not saved. ErosCraft is adults only, and this check cannot be turned off. Say the age plainly in the prompt (\"a woman in her late twenties\") and run again.",
+        "video": "A frame of the finished video reads as someone under 18, so it was not saved. ErosCraft is adults only, and this check cannot be turned off."
+      }
+    },
+    "unclear": {
+      "request": "The safety check could not get a clear answer, so nothing was made. That is not a finding about your request: run it again, and if it stops again, the console line says why.",
+      "output": {
+        "image": "The safety check could not get a clear answer about the finished image, so it was not saved. That is not a finding about the image: run it again, and if it stops again, the console line says why.",
+        "video": "The safety check could not get a clear answer about the finished video, so it was not saved. That is not a finding about the video: run it again, and if it stops again, the console line says why."
+      }
+    }
+  },
+
+  "civitai": {
+    "refused_flags": {
+      "poi": "it depicts a real person",
+      "minor": "it depicts a minor",
+      "sfwOnly": "its author marked it SFW-only"
+    },
+    "refused_words": [
+      "loli", "shota", "child", "children", "kid", "kids", "underage", "under 18", "teen", "teenager",
+      "schoolgirl", "school girl", "schoolboy", "young girl", "young boy", "little girl", "little boy",
+      "age slider", "ageslider", "celebrity", "celeb", "lookalike", "look-alike", "likeness",
+      "non-consensual", "nonconsensual", "rape"
+    ],
+    "checked": ["search", "download"]
+  },
+
+  "workflows": {
+    "eroscraft-image-creator-qwen-2.1": {
+      "media": "image",
+      "pack": "ComfyUI-Qwen21-Adult-Policy",
+      "checkpoints": ["request", "rewrite", "inputs", "output"],
+      "civitai_picker": true,
+      "words_checked": "2026-10-03"
+    },
+    "eroscraft-video-creator-wan-2.2": {
+      "media": "video",
+      "pack": "ComfyUI-Wan22-Adult-Policy",
+      "checkpoints": ["request", "inputs", "output"],
+      "civitai_picker": false,
+      "words_checked": "2026-10-03"
+    },
+    "eroscraft-video-creator-minimax-h3": {
+      "media": "video",
+      "pack": "ComfyUI-H3-Adult-Policy",
+      "checkpoints": ["request", "inputs", "output"],
+      "civitai_picker": false,
+      "words_checked": null
+    },
+    "eroscraft-image-creator-krea-2": {
+      "media": "image",
+      "pack": "ComfyUI-Krea2-Adult-Policy",
+      "checkpoints": ["request", "rewrite", "inputs", "output"],
+      "civitai_picker": true,
+      "words_checked": null
+    },
+    "eroscraft-character-creator-krea-2": {
+      "media": "image",
+      "pack": "ComfyUI-Krea2CC-Gate",
+      "checkpoints": ["request", "inputs", "output"],
+      "civitai_picker": false,
+      "words_checked": null
+    },
+    "eroscraft-image-creator-anima": {
+      "media": "image",
+      "pack": null,
+      "checkpoints": ["request", "inputs", "output"],
+      "civitai_picker": false,
+      "words_checked": null
+    }
+  }
+}
