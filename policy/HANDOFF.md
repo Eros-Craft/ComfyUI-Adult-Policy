@@ -71,7 +71,8 @@ created or used by this project. GitHub Actions on this public repository cost n
   version reads `NodeVersionStatusFlagged`, and that `cdn.comfy.org/.../1.1.4/node.zip` answers 200, 29,207 bytes
   (both read this session). Qwen 2.1 measured at 14:20 UTC that it loads in ComfyUI 0.38.2 and that its answer reader
   fails open: "minor: no idea", "minor: no (but unsure)" and "minor: no" followed by "minor: yes" all read as a clear
-  no. The fix is 1.1.5, the strict reader (policy repository PR #12, Qwen 2.1's export), which waits for the owner
+  no. The fix is 1.1.5, the strict reader (policy repository PR #12, Qwen 2.1's: #4's commits placed on today's main,
+  keeping `policy/` and `.comfyignore`, not an export, since the source is 1.4.0), which waits for the owner
   (§6, first row). An earlier line here said a flagged version cannot be installed; that was wrong.
 - **Registry**: the node's `repository` still reads the old name until the next publish (Qwen 2.1's, D3).
 
@@ -101,9 +102,10 @@ which `test_h3_rewords_only_its_five_stops` holds. Revisit when a second workflo
 Qwen 2.1 project owns the node pack, its versions and every Registry publish. A change to the pack's code arrives
 only through an export (`.github/CONTRIBUTING.md`).
 
-**D4. PR #4 (pack 1.1.5, the bare-no reader, hand-made here) is superseded by PR #12** (Qwen 2.1's export of
-1.1.5 from its source, D3, agreeing with the 13:21 comment on #4): #4 closes when #12 merges, since merging #4
-would publish from the export instead of the source.
+**D4. PR #4 (pack 1.1.5, the bare-no reader) is superseded by PR #12** (Qwen 2.1's, D3: #4's commits
+cherry-picked onto today's main so `policy/` stays; an export could not make 1.1.5, because the source is 1.4.0 and
+the export tool refuses a version that differs from the workflow's). #4 closes when #12 merges. 1.4.0 goes public
+by export after Qwen 2.1's Verda release check.
 
 **D5. `tests` is not a required check on `main`** (the testing thread, PR #11): exports push to `main` directly.
 
