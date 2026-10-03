@@ -1,6 +1,6 @@
 # ErosCraft adult policy
 
-Version 0.1.2, draft. The machine-readable copy is [`eroscraft-adult-policy.json`](eroscraft-adult-policy.json); where
+Version 0.1.3, draft. The machine-readable copy is [`eroscraft-adult-policy.json`](eroscraft-adult-policy.json); where
 this page and the file differ, the file is what runs and this page is wrong.
 
 **18+ only.** Every ErosCraft workflow makes erotic and fantasy pictures and videos for adults, made by the person
@@ -25,8 +25,9 @@ toggle that changes what is checked.
 
 1. **Nobody under 18.** Asked of the words as typed, of the prompt enhancer's rewrite when one runs, of every photo or
    clip the person adds, and of the finished image (or sampled frames of a finished video) before it is saved.
-2. **No famous real person named.** Asked of the words as typed and of the enhancer's rewrite. Celebrities, public
-   figures and influencers are refused; an ordinary consenting adult in the person's own photo is not.
+2. **No famous real person named.** Asked of the words as typed, of the enhancer's rewrite, and of every photo or clip
+   the person adds, since a famous face in a photo needs no name. Celebrities, public figures and influencers are
+   refused; an ordinary consenting adult in the person's own photo is not. A stop never says who it thought it saw.
 
 ## Every check fails closed
 
@@ -51,13 +52,15 @@ prompt in the file. Each fact is a yes/no question where "yes" is unsafe:
 | `minor` | the words and the rewrite | 1 |
 | `well_known_real_person` | the words and the rewrite | 2 |
 | `anyone_under_18` | every input photo or clip, and the output | 1 |
+| `famous_person_in_image` | every input photo or clip | 2 |
 
 **What is measured, and what is not.** On 2026-09-11, with a Qwen3-VL 4B: the two text facts scored 0 false
 negatives and 0 false positives over a 12-prompt set, and the age question caught 6 of 6 minors on generated stills,
 including the 16 to 17 band, with one false stop on an 18-year-old. It is **not** measured on real photos, on video
 frames, or on the Qwen3-VL 8B that Qwen 2.1 asks through. Until it is, read those checks as "asked and failing
-closed", not "measured". No test anywhere uses an image of a minor; the minors checks are measured only for false
-stops on adults.
+closed", not "measured". `famous_person_in_image` (0.1.3) is unmeasured and stays so: measuring it needs photos of
+real famous people, which no ErosCraft test makes or uses. No test anywhere uses an image of a minor; the minors checks
+are measured only for false stops on adults.
 
 ## The Civitai picker
 

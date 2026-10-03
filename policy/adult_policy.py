@@ -26,7 +26,7 @@ FILE_NAME = "eroscraft-adult-policy.json"
 REQUIRED_GATES = ("consent", "adult")
 REQUIRED_RULES = {
     "no_minors": {"request", "rewrite", "inputs", "output"},
-    "no_famous_real_person": {"request", "rewrite"},
+    "no_famous_real_person": {"request", "rewrite", "inputs"},
 }
 CHECKPOINTS = ("request", "rewrite", "inputs", "output")
 # Every workflow checks the words before anything samples and the result before anything is saved. "rewrite" and
@@ -71,6 +71,9 @@ def validate(data):
                 raise PolicyError("rule %s names fact %s, which the file does not ask" % (key, fact))
         if not rule.get("facts"):
             raise PolicyError("rule %s asks no fact" % key)
+        if {"inputs", "output"} & set(rule.get("checked_at") or ()) and not any(
+                facts[f].get("asked_of") == "image" for f in rule["facts"]):
+            raise PolicyError("rule %s is checked on photos but asks no image fact" % key)
 
     if (data.get("fail_closed") or {}).get("required") is not True:
         raise PolicyError("fail_closed.required must be true")
@@ -83,8 +86,11 @@ def validate(data):
         for fact in (f for r in rules.values() for f in r.get("facts") or () if facts[f].get("asked_of") == "text"):
             if fact not in (messages.get(section) or {}):
                 raise PolicyError("no %s message for fact %s" % (section, fact))
+    # An image fact asked of the person's photos stops before anything samples, so its sentence is under "request";
+    # one whose rule also checks the finished result needs an "output" sentence too.
     for fact in (k for k, f in facts.items() if f.get("asked_of") == "image"):
-        for section in ("request", "output"):
+        at_output = any(fact in (r.get("facts") or ()) and "output" in (r.get("checked_at") or ()) for r in rules.values())
+        for section in ("request", "output") if at_output else ("request",):
             if fact not in (messages.get(section) or {}):
                 raise PolicyError("no %s message for fact %s" % (section, fact))
 
