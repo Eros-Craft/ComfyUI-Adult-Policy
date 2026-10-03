@@ -13,6 +13,7 @@ import os
 import pathlib
 import sys
 
+sys.dont_write_bytecode = True      # a test run leaves nothing in the export to commit by mistake
 HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import adult_policy as ap  # noqa: E402
