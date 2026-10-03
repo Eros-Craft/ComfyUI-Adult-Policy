@@ -22,6 +22,7 @@ Verda release check.
 | T2 render | inherited, not run | a stop through a real run and an image out, on a workflow's Comfy deployment carrying the pack: owed by each adopter (Qwen 2.1's sweep is owed in its own HANDOFF §6) |
 | T3 copies | one re-derive owed | Qwen 2.1 main (`717ba72`, V1.4.0): `adult_policy.py` equal below its two-line GENERATED header (source sha256 prefix `769f0da12e48b925`, this folder's file); its `eroscraft-adult-policy.json` is byte-equal to 0.1.0 (`8a7d6ed`), and both zips (`-verda.zip`, `-verda-customer.zip`) carry those exact bytes. #9 made the file 0.1.1 (MiniMax H3's entry only), so Qwen 2.1 re-derives once (§9, request 1); its words do not change (the staged test below passes with 0.1.1). Measured with `cmp` and a zip read |
 | T3 export, staged | green, not run | `policy/` plus Qwen 2.1's 1.4.0 `qwen21_adult_policy/` laid side by side: `test_policy.py` 14 passed at 0.1.1; the export's refusal scan and ruff S102, S307, E702 clean over the 1.4.0 pack. ErosCraft #45 and #46 make an export keep `policy/` and rewrite `.github/` to exactly what is here (`checks.yml`, `publish_action.yml`, `dependabot.yml` and all seven community files compared equal this session) |
+| T3 words, every compared pack | green | `test_policy.py` with no skip: Qwen 2.1's pack in this repository, `WAN22_POLICIES` at the Wan 2.2 pack on workspace main `288a888`, `H3_POLICIES` at MiniMax H3's main `de2168c`: 14 passed, every question and stop sentence each pack shows equal to the file resolved for its entry. Krea 2, the Character Creator and Anima are not compared yet (their projects' adoption) |
 | T3 version | green for the policy; the pack here is stale | the file and `POLICY.md` both say 0.1.1, and `test_document_names_the_file_version` (#9) holds them together. The exported pack here is 1.1.4; its source is 1.4.0; the export is the Registry publish (§4) |
 | T3 read as a buyer | corrected in this PR | `policy/README.md` had four stale statements (§2); `POLICY.md` read clean |
 | T4 Verda | inherited, not run | the first adopter's release check, Qwen 2.1 V1.4.0 (`docs/verda-release.md` in that repository): not run |
@@ -108,6 +109,11 @@ cancelled. A separate Desktop run here would prove nothing that sweep does not.
 Qwen 2.1 measures whether 1.1.3 and 1.1.4 can be installed, then decides between holding and releasing 1.1.5, and
 says so before any merge.
 
+**D10. The policy leaves "draft" when its first adopter passes T4** (this session, 2026-10-03). The file's
+`status` and `POLICY.md`'s first line say draft. Every status change is a version change that every adopter
+re-derives, so it is made once, as 1.0.0, when Qwen 2.1's Verda release check passes with the derived copies, and
+not before: until a run on a buyer's machine has shown the stops, "draft" is the honest word.
+
 **D9. Real-photo edits stay on ✅ Consent; the policy is not changed to hold them** (2026-10-03, on the storefront
 orchestrator's report, relayed by the coordinator, that `eroscraft/CLAUDE.md` rule 3 holds explicit real-photo edits
 until "Consent in person" ships). Rule 3 says the opposite: "An explicit edit of a real photo runs on ✅ Consent
@@ -173,3 +179,11 @@ a zip read of both Qwen 2.1 zips; the staged export (copy `policy/` and Qwen 2.1
 folder, run the test there, run the refusal scan and `ruff check --isolated --select S102,S307,E702`); publish_pack
 from ErosCraft #46 imported and its `CHECKS`, `PUBLISH_ACTION`, `DEPENDABOT` and `community_files()` compared with
 `.github/`. **Owed.** §4. **Found on the way.** §8, and the README's four stale statements, fixed in this PR.
+
+### 2. The re-audit against the plan and the source (2026-10-03, no machine)
+
+**Proven.** Read again against `docs/testing-ci.md`, `.github/testing/TESTING.md`, the publishing plan, root
+`CLAUDE.md` and `eroscraft/CLAUDE.md` rule 3: the gate table holds, D9 holds, no em dash or refused string in
+`policy/` (`house_rules.py`, 35 files). Added: the three-pack word comparison (§1, "T3 words"), D10. Nothing in
+the JSON or the reader changed, so the file stays 0.1.1. **How.** `H3_POLICIES=... WAN22_POLICIES=... python3
+policy/test_policy.py` from the three checkouts above. **Owed.** §4 and §9; none of it is in `policy/`.
