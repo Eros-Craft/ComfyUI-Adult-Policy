@@ -7,6 +7,10 @@ on:
     paths:
       - "pyproject.toml"
 
+# The job needs only the Registry token, which it reads as a secret; GITHUB_TOKEN gets nothing it could write with.
+permissions:
+  contents: read
+
 jobs:
   publish-node:
     name: Publish Custom Node to registry
@@ -16,7 +20,11 @@ jobs:
       # Every action is pinned to a full commit SHA, since this job holds the Registry token; Dependabot moves the pins.
       - name: Check out code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
       - name: Publish Custom Node
         uses: Comfy-Org/publish-node-action@d2366e7abb6ab16f3bb03e3520ae25c8cf749bc9  # main, 2025-05-09
         with:
           personal_access_token: ${{ secrets.REGISTRY_ACCESS_TOKEN }}
+          # the action's own checkout is an unpinned actions/checkout@v4; the pinned one above already did the job
+          skip_checkout: "true"
