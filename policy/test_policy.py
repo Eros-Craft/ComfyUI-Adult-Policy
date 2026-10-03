@@ -35,6 +35,25 @@ def _pack_policies(path, name):
     return _module(name, pathlib.Path(path))
 
 
+# The words each version of the file changed, by the names `_matches` gives them. A pack that copied its words before
+# a change (its own literals, or a derived copy of an older file) shows the old words until it re-derives, so those
+# names are left out for it, and only those: every other word must still be equal.
+CHANGED_IN = {
+    "0.1.2": {"unclear"},       # the request's unclear stop: rerunning gets the same answer, so reword instead
+}
+
+
+def _ver(v):
+    return tuple(int(x) for x in v.split("."))
+
+
+def _behind(mod):
+    """The names a pack may still show in an older wording: those changed after the file version it read."""
+    shared = getattr(mod, "SHARED", None)
+    read = getattr(shared, "version", "0.1.1")    # a pack with its own literals was last compared at 0.1.1
+    return set().union(*(names for ver, names in CHANGED_IN.items() if _ver(ver) > _ver(read)))
+
+
 def _matches(pol, mod):
     """Every word a pack asks and shows, compared with the shared file resolved for its medium."""
     m = pol.messages
@@ -57,7 +76,8 @@ def _matches(pol, mod):
         pairs["rewrite stop " + key] = (m["rewrite"][key], text)
     if hasattr(mod, "REFUSED_WORDS"):
         pairs["refused words"] = (pol.refused_word_list, tuple(mod.REFUSED_WORDS))
-    bad = [k for k, (a, b) in pairs.items() if a != b]
+    behind = _behind(mod)
+    bad = [k for k, (a, b) in pairs.items() if a != b and k not in behind]
     assert not bad, "the shared file and the pack differ on: " + ", ".join(bad)
 
 
@@ -201,6 +221,18 @@ def test_an_unlisted_workflow_names_its_medium():
     else:
         raise AssertionError("an unlisted workflow loaded without a medium")
     assert ap.load("eroscraft-image-creator-new-model", media="video").media == "video"
+
+
+def test_unclear_request_says_reword_not_rerun():
+    """The checker decodes greedily, so the same words and photos get the same unclear answer every time (Qwen 2.1's
+    T2 reproduced it). The request's unclear stop tells the person to reword; the output's may say run again, since a
+    new run draws a new picture."""
+    for media in ap.MEDIA:
+        m = ap.load(media=media).messages["unclear"]
+        assert "run it again" not in m["request"] and "Reword it" in m["request"]
+        assert "a finding about your request" in m["request"]          # never tells them they asked for a minor
+        assert "run it again" in m["output"]
+    assert all(_ver(v) <= _ver(RAW["version"]) for v in CHANGED_IN), "CHANGED_IN names a version the file is not at yet"
 
 
 def test_document_names_the_file_version():
