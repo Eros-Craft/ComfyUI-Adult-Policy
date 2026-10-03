@@ -152,25 +152,29 @@ FACT_SYSTEM = ("You are a strict content classifier. For each labelled question,
                "'key: no', in the order given, and nothing else.")
 
 
-# A key, then its value. The key is found on its own, as a whole word (letters, digits, "_" and "-" are part of a
-# word, so "not_a_minor" and "not-minor" never answer "minor"), and EVERY place it appears must then carry a readable
-# value on the same line: markdown bold or backticks around the key or the colon, a colon, an equals sign, a dash or
-# a space, then the rest of the line. A place whose value cannot be read ("minor: \"yes\"", "minor? yes", "**minor:**
-# _yes_") counts as an unclear answer, never as a place skipped (2026-10-03: the reader before this one only counted
-# the places its one pattern matched, so a later "Image 2 - minor: \"yes\"" was never read and the earlier "no" won).
-def _key_re(key: str) -> re.Pattern:
-    return re.compile(r"(?<![a-z0-9_-])%s(?![a-z0-9_-])" % re.escape(key.lower()))
-
-
+# A key, then its value. EVERY place the key's letters appear is a place it was answered, and each must carry a
+# readable value on the same line: markdown bold or backticks around the key or the colon, a colon, an equals sign,
+# a dash or a space, then the rest of the line. A place whose value cannot be read ("minor: \"yes\"", "minor? yes",
+# "**minor:** _yes_") is an unclear answer, never a place skipped, and so is a place where the key is joined to other
+# text by a letter, a digit, "_" or "-" ("Image 2-minor: yes", "minor_2: yes", "minors: yes", "not_a_minor: no"):
+# no clean answer is written that way, and reading it as some other word is what let a later "yes" through
+# (2026-10-03, two independent reviews of the strict reader; no fact's key is a part of another's).
+_JOINED = frozenset("abcdefghijklmnopqrstuvwxyz0123456789_-")
 _VALUE_RE = re.compile(r"[*`]*[ \t]*[:=-]?[ \t]*[*`]*[ \t]*([a-z]+)([^\n]*)")
 
 
 def _values(low: str, key: str) -> set:
-    """The value of every place `key` appears in `low`, None where a place has no readable value."""
-    out = set()
-    for m in _key_re(key).finditer(low):
-        v = _VALUE_RE.match(low, m.end())
-        out.add(_one_value(v.group(1), v.group(2)) if v else None)
+    """The value of every place `key` appears in `low`, None where a place is joined to other text or has no
+    readable value."""
+    out, key, at = set(), key.lower(), 0
+    while (at := low.find(key, at)) >= 0:
+        end = at + len(key)
+        if (at and low[at - 1] in _JOINED) or (end < len(low) and low[end] in _JOINED):
+            out.add(None)
+        else:
+            v = _VALUE_RE.match(low, end)
+            out.add(_one_value(v.group(1), v.group(2)) if v else None)
+        at = end
     return out
 
 
