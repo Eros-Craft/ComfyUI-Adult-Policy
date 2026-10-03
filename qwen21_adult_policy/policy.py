@@ -152,13 +152,26 @@ FACT_SYSTEM = ("You are a strict content classifier. For each labelled question,
                "'key: no', in the order given, and nothing else.")
 
 
-# A key, then its value: the key as a whole word (markdown bold or backticks around it allowed), a colon, an equals
-# sign, a dash or a space, then the rest of the line. The reader before this one took the first place a key appeared,
-# as a substring, and the first word after it, so "minor: no idea" read as a clear no, a later "minor: yes" for the
-# same key (one line per frame or photo, say) was never read, and "not_a_minor: no" answered "minor". All three failed
-# open; found on 2026-10-03 while the Qwen 2.1 app synced its policy with Krea 2's, whose reader this is.
-def _answer_re(key: str) -> re.Pattern:
-    return re.compile(r"(?<![a-z0-9_])%s(?![a-z0-9_])[*`]*\s*[:=-]?\s*[*`]*([a-z]+)([^\n]*)" % re.escape(key.lower()))
+# A key, then its value. The key is found on its own, as a whole word (letters, digits, "_" and "-" are part of a
+# word, so "not_a_minor" and "not-minor" never answer "minor"), and EVERY place it appears must then carry a readable
+# value on the same line: markdown bold or backticks around the key or the colon, a colon, an equals sign, a dash or
+# a space, then the rest of the line. A place whose value cannot be read ("minor: \"yes\"", "minor? yes", "**minor:**
+# _yes_") counts as an unclear answer, never as a place skipped (2026-10-03: the reader before this one only counted
+# the places its one pattern matched, so a later "Image 2 - minor: \"yes\"" was never read and the earlier "no" won).
+def _key_re(key: str) -> re.Pattern:
+    return re.compile(r"(?<![a-z0-9_-])%s(?![a-z0-9_-])" % re.escape(key.lower()))
+
+
+_VALUE_RE = re.compile(r"[*`]*[ \t]*[:=-]?[ \t]*[*`]*[ \t]*([a-z]+)([^\n]*)")
+
+
+def _values(low: str, key: str) -> set:
+    """The value of every place `key` appears in `low`, None where a place has no readable value."""
+    out = set()
+    for m in _key_re(key).finditer(low):
+        v = _VALUE_RE.match(low, m.end())
+        out.add(_one_value(v.group(1), v.group(2)) if v else None)
+    return out
 
 
 def _one_value(word: str, rest: str) -> Optional[bool]:
@@ -178,7 +191,7 @@ def _plain_answer(answer: Optional[str], key: str) -> Optional[bool]:
     """The one plain yes or no `key` was answered with every place it appears, or None (missing, hedged, or two
     places that disagree)."""
     low = (answer or "").lower()
-    values = {_one_value(m.group(1), m.group(2)) for m in _answer_re(key).finditer(low)}
+    values = _values(low, key)
     return values.pop() if len(values) == 1 and None not in values else None
 
 
