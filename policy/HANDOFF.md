@@ -20,16 +20,16 @@ Verda release check.
 | T1 Desktop | carried by Qwen 2.1's T1 | D7: CI's macOS smoke (green, above) plus Qwen 2.1's T1 Desktop sweep, which runs the derived policy on the Mac's dev install (that sweep is the Qwen 2.1 project's; port 8296 went to it). `desktop-check.sh` stays for a later change to the pack |
 | T2 Cloud check | green, with "Cloud cannot" and "skipped" rows | `comfy-cloud.yml`: the parity smoke at Comfy Cloud's own ComfyUI v0.38.2 passes; Cloud has no node library entry for the pack ("Cloud cannot": Cloud runs only its own library, and is safe for work only); the rows that read Cloud say "skipped" until the `COMFY_API_KEY` secret is set (§6) |
 | T2 render | inherited, not run | a stop through a real run and an image out, on a workflow's Comfy deployment carrying the pack: owed by each adopter (Qwen 2.1's sweep is owed in its own HANDOFF §6) |
-| T3 copies | one re-derive owed | Qwen 2.1 main (`717ba72`, V1.4.0): `adult_policy.py` equal below its two-line GENERATED header (source sha256 prefix `769f0da12e48b925`, this folder's file); its `eroscraft-adult-policy.json` is byte-equal to 0.1.0 (`8a7d6ed`), and both zips (`-verda.zip`, `-verda-customer.zip`) carry those exact bytes. #9 made the file 0.1.1 (MiniMax H3's entry only) and D12 0.1.2 (the request's unclear stop reworded), so Qwen 2.1 re-derives once (§9, request 1); after that its buyers read the new unclear sentence and every other word stays. Measured with `cmp` and a zip read |
+| T3 copies | one re-derive owed | Qwen 2.1 main (`717ba72`, V1.4.0): `adult_policy.py` equal below its two-line GENERATED header (source sha256 prefix `769f0da12e48b925`, this folder's file); its `eroscraft-adult-policy.json` is byte-equal to 0.1.0 (`8a7d6ed`), and both zips (`-verda.zip`, `-verda-customer.zip`) carry those exact bytes. #9 made the file 0.1.1 (MiniMax H3's entry only) D12 0.1.2 (the request's unclear stop reworded) and D13 0.1.3 (a famous face in an input photo asked), so Qwen 2.1 re-derives once (§9, request 1); after that its buyers read the new unclear sentence, every other word stays, and the new fact asks nothing until its engine asks it (request 5). Measured with `cmp` and a zip read |
 | T3 export, staged | green, not run | `policy/` plus Qwen 2.1's 1.4.0 `qwen21_adult_policy/` laid side by side: `test_policy.py` 14 passed at 0.1.1; the export's refusal scan and ruff S102, S307, E702 clean over the 1.4.0 pack. ErosCraft #45 and #46 make an export keep `policy/` and rewrite `.github/` to exactly what is here (`checks.yml`, `publish_action.yml`, `dependabot.yml` and all seven community files compared equal this session) |
 | T3 words, every compared pack | green | `test_policy.py` with no skip: Qwen 2.1's pack in this repository, `WAN22_POLICIES` at the Wan 2.2 pack on workspace main `288a888`, `H3_POLICIES` at MiniMax H3's main `de2168c`: 14 passed, every question and stop sentence each pack shows equal to the file resolved for its entry. Krea 2, the Character Creator and Anima are not compared yet (their projects' adoption) |
-| T3 version | green for the policy; the pack here is stale | the file and `POLICY.md` both say 0.1.2, and `test_document_names_the_file_version` (#9) holds them together. The exported pack here is 1.1.4; its source is 1.4.0; the export is the Registry publish (§4) |
+| T3 version | green for the policy; the pack here is stale | the file and `POLICY.md` both say 0.1.3, and `test_document_names_the_file_version` (#9) holds them together. The exported pack here is 1.1.4; its source is 1.4.0; the export is the Registry publish (§4) |
 | T3 read as a buyer | corrected in this PR | `policy/README.md` had four stale statements (§2); `POLICY.md` read clean |
 | T4 Verda | inherited, not run | the first adopter's release check, Qwen 2.1 V1.4.0 (`docs/verda-release.md` in that repository): not run |
 
 **Live defect first:** published pack 1.1.4 still installs with a fail-open answer reader; the fix, PR #12, waits for
 the owner (§4, §6). **Ready to sell (D1): not yet.** What is left is Qwen 2.1's T1 Desktop sweep, T2 render and T4 (not run),
-and the owner's merges of ErosCraft #45 and #46, plus Qwen 2.1's one re-derive to 0.1.2. Nothing in `policy/` itself is
+and the owner's merges of ErosCraft #45 and #46, plus Qwen 2.1's one re-derive to 0.1.3. Nothing in `policy/` itself is
 red.
 
 ## 2. What finished overnight (2026-10-02 evening to 2026-10-03 14:15 UTC)
@@ -127,7 +127,7 @@ not before, and not while the age-check finding (§8) is open: until a run on a 
 **D11. An additive age margin, `age_margin` at 25, may ship without the owner once measured** (the "Age check safety
 margin" thread, 2026-10-03; its full note is `notes/age-margin.md` in the project's shared files). A second image-only
 fact, asked in the same call as `anyone_under_18`, where either "yes" stops; the text fact `minor` gets none. The
-file goes 0.1.2 to 0.2.0, and merges only after an adults-only measurement passes. Its grounds: `POLICY.md` lets a
+file goes to 0.2.0, and merges only after an adults-only measurement passes. Its grounds: `POLICY.md` lets a
 check be added and refuses only weakening, rule 3 (`eroscraft/CLAUDE.md:30-34`, `:42-44`) protects the rules from
 removal or moving, and `adult_policy.py`'s `validate` refuses only weakening. Nothing is removed or moved, and the
 measured `anyone_under_18` wording stays, so every adopter's words still match. Each adopter's engine must ask the
@@ -144,6 +144,20 @@ sentences keep "run it again", because a new run draws a new picture. `test_poli
 that copied its words before a version shows the old wording of exactly the names that version changed, and every
 other word must still be equal; `test_unclear_request_says_reword_not_rerun` holds the new wording. The age margin
 (D11) rebases onto this.
+
+**D13. A famous face in an input photo is asked, and ships unmeasured** (the coordinator's decision, 2026-10-03, on
+Qwen 2.1's rule 3 audit; policy 0.1.3). Rule 2 asked only the words, so a recognisable famous person in an uploaded
+photo with no name typed was never checked, and the uploader's ✅ Consent was the only guard. The file adds the image
+fact `famous_person_in_image`, asked of every photo or clip the person adds, in the same call as `anyone_under_18`;
+"yes" stops, and the stop sentence names nobody. Rule 2 is now checked at `inputs` too, and the reader refuses a copy
+that drops it, a rule checked on photos that asks no image fact, or the stop's sentence. It is not asked of the output,
+so the reader asks an `output` sentence only of image facts whose rule checks the output. Grounds: strictly tighter,
+which `POLICY.md` allows ("may add checks", lines 8 and 9) and rule 3 does not forbid. It ships marked "unmeasured"
+(`POLICY.md`, "Changing this policy"), because measuring it needs photos of real famous people, which no ErosCraft test
+makes or uses. Cost to watch: its false-stop rate on ordinary people's photos is unknown, and a false stop blocks a
+consented real-photo edit (D9). Rule 2's own words, "No famous real person named", are the owner's and are unchanged;
+the rule's description in `POLICY.md` now names photos. It stops nothing in a pack until that pack's engine asks it
+(§9, request 5). `test_a_famous_face_in_a_photo_is_asked` holds it.
 
 **D9. Real-photo edits stay on ✅ Consent; the policy is not changed to hold them** (2026-10-03, on the storefront
 orchestrator's report, relayed by the coordinator, that `eroscraft/CLAUDE.md` rule 3 holds explicit real-photo edits
@@ -189,10 +203,11 @@ policy): only the JSON and the reader are derived into packs, so a README edit l
 
 ## 9. Requests to other projects (sent through the coordinator; nothing edited in their repositories)
 
-1. **To Qwen 2.1: re-derive the policy to 0.1.2.** `python3 _build/derive.py` with this repository beside it, then
+1. **To Qwen 2.1: re-derive the policy to 0.1.3.** `python3 _build/derive.py` with this repository beside it, then
    the zips; its `derive.yml` turns red the next night until then. 0.1.1 changed only MiniMax H3's entry; 0.1.2
-   rewords the request's unclear stop (D12), the one sentence its buyers will read differently. Its pack passes
-   `test_policy.py` against 0.1.2 with a copy of the new file (measured), and fails on any other word.
+   rewords the request's unclear stop (D12), the one sentence its buyers will read differently; 0.1.3 adds a fact
+   (D13) and changes no word. Its pack, with the new file and reader copied in, loads and passes `test_policy.py`
+   (measured), and fails on any other word.
 2. **To Qwen 2.1: assert the policy's version in its suite.** `policy/README.md` step 5 asks the suite to check
    `SHARED.version` against the version the handbook names; `grep` finds no such assertion in its `suite.py`.
 3. **To MiniMax H3:** its entry is in (#9, 0.1.1); it can derive the two files and switch `policies.py` to reads
@@ -200,6 +215,9 @@ policy): only the JSON and the reader are derived into packs, so a README edit l
 4. **To Wan 2.2 and MiniMax H3:** Wan 2.2's pack carries its own literal of the old unclear sentence; it moves to the
    new one when it adopts the file. MiniMax H3's entry rewords its own unclear stops and still says "run it again"
    for a request, which D12 found does not help; its project decides whether to follow (its entry, its words).
+5. **To every adopter that takes photos or clips (Qwen 2.1 first): ask `famous_person_in_image`** (D13) at `inputs`, in
+   the same call as `anyone_under_18`, and show `messages.request.famous_person_in_image` on "yes" (an unclear answer
+   shows the unclear stop, as for every fact); not at `output`. `policy/README.md` step 4 has the line.
 
 ## 8. Known external defects (recorded, not patched here)
 

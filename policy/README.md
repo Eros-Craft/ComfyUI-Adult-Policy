@@ -29,7 +29,9 @@ its module folder instead (Qwen 2.1 does, since its 1.4.0 source).
 
 Version 0.1.2 rewords the request's "unclear" stop (rerunning gets the same answer, so it asks for a reworded request).
 A pack that copied its words before then shows the old sentence until it re-derives; `CHANGED_IN` in `test_policy.py`
-lists each version's changed words, and every other word must still be equal. "Not yet" means that workflow's pack has not been compared with the file, so its checkpoints above are a first
+lists each version's changed words, and every other word must still be equal. Version 0.1.3 adds
+`famous_person_in_image`, asked of every photo or clip the person adds in the same call as `anyone_under_18`; it stops
+nothing until a pack's engine asks it, and it is unmeasured. "Not yet" means that workflow's pack has not been compared with the file, so its checkpoints above are a first
 guess its session confirms when it adopts. A new workflow adds its own row to `workflows` in the same change that
 wires it in.
 
@@ -75,6 +77,7 @@ Where a workflow's adult pack is generated in part by its `_build/derive.py` (Qw
        MINOR_TEXT = Fact("minor", SHARED.question("minor"))
        FAMOUS_TEXT = Fact("well_known_real_person", SHARED.question("well_known_real_person"))
        AGE_IMAGE = Fact("anyone_under_18", SHARED.question("anyone_under_18"))
+       FAMOUS_IMAGE = Fact("famous_person_in_image", SHARED.question("famous_person_in_image"))  # inputs only
        STOPS = {"toggle_consent": SHARED.messages["gates_off"]["consent"],
                 "toggle_adult": SHARED.messages["gates_off"]["adult"], **SHARED.messages["request"]}
        REWRITE_STOPS = SHARED.messages["rewrite"]

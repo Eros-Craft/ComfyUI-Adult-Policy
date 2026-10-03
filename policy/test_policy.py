@@ -170,6 +170,9 @@ def test_weakened_copies_are_refused():
     _refused(lambda d: d["fail_closed"].update(required=False))                     # fail open
     _refused(lambda d: d["fail_closed"]["answer_words"]["safe"].append("unsure"))   # a maybe read as safe
     _refused(lambda d: d["messages"]["output"].pop("anyone_under_18"))              # a stop with no sentence
+    _refused(lambda d: d["rules"][1]["checked_at"].remove("inputs"))                # photos no longer checked for fame
+    _refused(lambda d: d["rules"][1]["facts"].remove("famous_person_in_image"))     # checked on photos, asking nothing
+    _refused(lambda d: d["messages"]["request"].pop("famous_person_in_image"))      # a photo stop with no sentence
     _refused(lambda d: d["civitai"].update(refused_words=[]))                       # the picker unguarded
     _refused(lambda d: d.update(schema=2))                                          # a schema this reader can't judge
 
@@ -233,6 +236,21 @@ def test_unclear_request_says_reword_not_rerun():
         assert "a finding about your request" in m["request"]          # never tells them they asked for a minor
         assert "run it again" in m["output"]
     assert all(_ver(v) <= _ver(RAW["version"]) for v in CHANGED_IN), "CHANGED_IN names a version the file is not at yet"
+
+
+def test_a_famous_face_in_a_photo_is_asked():
+    """Rule 2 checked only the words, so a famous person in an uploaded photo with no name typed was never asked
+    (Qwen 2.1's rule 3 audit, 2026-10-03). 0.1.3 asks every photo or clip the person adds, in the same call as the age
+    question; the stop names nobody, and the fact is marked unmeasured because measuring it needs photos of real
+    famous people."""
+    fact = next(f for f in RAW["facts"] if f["key"] == "famous_person_in_image")
+    assert fact["asked_of"] == "image" and fact["unsafe"] is True and fact["measured"].startswith("unmeasured")
+    rule = next(r for r in RAW["rules"] if r["key"] == "no_famous_real_person")
+    assert "famous_person_in_image" in rule["facts"] and "inputs" in rule["checked_at"]
+    assert "output" not in rule["checked_at"] and "famous_person_in_image" not in RAW["messages"]["output"]
+    for media in ap.MEDIA:
+        stop = ap.load(media=media).messages["request"]["famous_person_in_image"]
+        assert "famous real person" in stop and "{" not in stop and "nothing was made" in stop
 
 
 def test_document_names_the_file_version():
