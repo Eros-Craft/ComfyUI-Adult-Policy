@@ -10,9 +10,11 @@ under `workflows` saying which medium it makes and which checkpoints it has.
 | [`eroscraft-adult-policy.json`](eroscraft-adult-policy.json) | The same policy for code: gates, rules, facts and their questions, the checker prompt, every stop sentence (image and video wording), the Civitai refusals, and the workflow list. |
 | [`adult_policy.py`](adult_policy.py) | The reader. Standard library only. Refuses a file that weakens the policy, applies a workflow's entry, and resolves each message for its medium. |
 | [`test_policy.py`](test_policy.py) | `python3 policy/test_policy.py`, no GPU and no ComfyUI. Proves the file equals the words the packs show today and that a weakened file or workflow entry is refused. |
+| [`HANDOFF.md`](HANDOFF.md) | The session record: where the policy stands gate by gate, the decisions made, what waits on whom. |
 
-This folder is in `.comfyignore`, so the Qwen 2.1 node pack that is also published from this repository does not
-carry it until that pack adopts it.
+This folder is in `.comfyignore`, so the Registry's `node.zip` of the Qwen 2.1 node pack also published from this
+repository never carries it. A pack that adopts the policy carries its own derived copy of the JSON and the reader in
+its module folder instead (Qwen 2.1 does, since its 1.4.0 source).
 
 ## The workflows
 
@@ -54,8 +56,9 @@ The file supplies the words; the decision to stop stays in the engine.
 
 ## Wiring it into a workflow
 
-Every workflow's adult pack (`ComfyUI-<Model>-Adult-Policy`) already has a `policy.py` generated from the shared
-engine by its `_build/derive.py`. The policy rides the same step.
+Where a workflow's adult pack is generated in part by its `_build/derive.py` (Qwen 2.1 and MiniMax H3 derive their
+`policy.py` that way), the policy rides the same step. A workflow without one (the Character Creator, whose pack is
+`ComfyUI-Krea2CC-Gate`) copies the two files in its own build step and lists them as generated the same way.
 
 1. **List it.** Add or confirm the workflow's row under `workflows`.
 2. **Derive it in.** `derive.py` copies `eroscraft-adult-policy.json` and `adult_policy.py` into the pack's module
@@ -84,29 +87,29 @@ engine by its `_build/derive.py`. The policy rides the same step.
 
 ## The order
 
-1. **Qwen 2.1 first.** Nothing changes for a person using it: every word in the file was copied from its
-   `qwen21_adult_policy/policies.py` and `civitai.py`, the test proves they are equal, and its pack carries its own
-   engine and loads alone. In its private repository, by the session that owns it: derive the two files into
-   `qwen21_adult_policy/`, replace the literal questions, stop sentences, gate sentences, `gates_off` and
-   `REFUSED_WORDS` in `policies.py` with reads from `load("eroscraft-image-creator-qwen-2.1")`, add both files to
-   `ZIP_EXTRA` and the suite, and release 1.1.5. `civitai.py` needs nothing: its flags and reasons already equal the
-   file's. The free tier of `_build/appe2e.py` should show every stop sentence unchanged.
+1. **Qwen 2.1, done** (2026-10-03, eroscraft-image-creator-qwen-2.1 #47, #48 and #49, in its 1.4.0 source). Its
+   `derive.py` copies the two files into `qwen21_adult_policy/`, `policies.py` reads every question, stop sentence,
+   gate sentence and refused word from `load("eroscraft-image-creator-qwen-2.1")`, and both zips carry the copies,
+   byte for byte equal to this folder (measured 2026-10-03, `HANDOFF.md`).
 2. **Wan 2.2**, already compared equal on the video wording (`WAN22_POLICIES=... python3 policy/test_policy.py`).
 3. **MiniMax H3, Krea 2, the Character Creator**: each compares its words first. Where its sentence differs, either
-   the pack moves to the policy's wording or the workflow's entry rewords it, and the owner decides which.
+   the pack moves to the policy's wording or the workflow's entry rewords it; the decision is recorded in
+   `HANDOFF.md`. MiniMax H3 is compared: its entry rewords five stops (#9; `HANDOFF.md`, D2).
 4. **Anima** wires it in when its pack is built, from the start.
 
 ## Where this lives
 
 This repository is the home of the adult policy for all ErosCraft workflows, and `policy/` is its source. Each
-workflow's build reads it from here (a checkout beside the workspace, named by an environment variable in
-`eroscraft.env`, the way `COMFY_BASE` names the base) and copies it into its pack. The Qwen 2.1 node pack also
+workflow's build reads it from here (a checkout of this repository beside the workflow's own folder,
+`../ComfyUI-Adult-Policy`, or wherever `CRAFT_POLICY` points; Qwen 2.1's `derive.yml` checks it out the same way on
+CI) and copies it into its pack. The Qwen 2.1 node pack also
 published from this repository is an export, as `.github/CONTRIBUTING.md` says; this folder is not.
 
 **The pack export:** the workspace's `eroscraft/_build/publish_pack.py` exports the Qwen 2.1 pack to this
 repository, `Eros-Craft/ComfyUI-Adult-Policy`, and leaves `policy/` in place and out of the Registry's `node.zip`
-(Eros-Craft/ErosCraft#45). The pack keeps its own name, Registry node id and module; only the repository was renamed.
+once Eros-Craft/ErosCraft#45 is merged; until then an export would delete it, so none runs. The pack keeps its own
+name, Registry node id and module; only the repository was renamed.
 
-The words were compared with the pack as exported here (1.1.4). The pack's source in the private Qwen 2.1
-repository is ahead of that (1.4.0), so the session that wires it in runs the same comparison against its own copy
-first.
+The pack exported here is still 1.1.4, from before it adopted the policy. Its source in the private Qwen 2.1
+repository is 1.4.0 and passes `test_policy.py` with this folder (measured 2026-10-03). Its export is a Registry
+publish, which the Qwen 2.1 project makes when its owner says so (`HANDOFF.md`).
