@@ -1,0 +1,28 @@
+name: A rule or a message in the shared policy
+description: Something in policy/ that should be stricter or clearer, or reads wrong for a workflow.
+labels: [policy]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The two gates and the two background rules stay, and a change that weakens one is declined. Attach nothing explicit, and never an image of a minor or of anyone who could be one. A way around a rule is a [private security report](https://github.com/Eros-Craft/ComfyUI-Adult-Policy/security/advisories/new), not an issue.
+  - type: input
+    id: entry
+    attributes:
+      label: Which entry
+      description: Its key in policy/eroscraft-adult-policy.json, or the section of policy/POLICY.md.
+    validations:
+      required: true
+  - type: textarea
+    id: now
+    attributes:
+      label: What it says now
+    validations:
+      required: true
+  - type: textarea
+    id: should
+    attributes:
+      label: What it should say, and why
+      description: The workflow and medium it matters for (image or video), and what a person would see differently.
+    validations:
+      required: true
