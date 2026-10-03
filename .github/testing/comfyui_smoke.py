@@ -45,6 +45,10 @@ import uuid
 import zipfile
 
 sys.dont_write_bytecode = True
+# the report carries the gates' emoji, which a Windows console's code page cannot print
+for _stream in (sys.stdout, sys.stderr):
+    if hasattr(_stream, "reconfigure"):
+        _stream.reconfigure(encoding="utf-8", errors="replace")
 REPO = pathlib.Path(__file__).resolve().parents[2]
 POLICY_DIR = REPO / "policy"
 # What Comfy Desktop adds when it launches a git install (the workspace's base/desktop.sh, measured on Desktop 1.1.3).

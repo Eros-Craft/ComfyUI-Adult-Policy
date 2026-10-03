@@ -17,6 +17,9 @@ import subprocess
 import sys
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
+for _stream in (sys.stdout, sys.stderr):        # a Windows console's code page cannot print every path
+    if hasattr(_stream, "reconfigure"):
+        _stream.reconfigure(encoding="utf-8", errors="replace")
 EXEMPT = {"LICENSE"}
 FORBIDDEN = (
     ("the other brand's name", re.compile("soul" + r"-?" + "craft", re.I)),
