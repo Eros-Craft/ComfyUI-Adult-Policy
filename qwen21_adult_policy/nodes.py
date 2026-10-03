@@ -15,6 +15,7 @@ assume is a bug.
 """
 import json
 import os
+import re
 
 from .policies import (FACT_SYSTEM, OUTPUT_STOPS, OUTPUT_UNCLEAR, RECOMMENDED, REWRITE_STOPS, SAMPLING_BY_VERSION,
                        UNCLEAR, gates_off, parse_answer, product, refused_words, verdict)
@@ -95,7 +96,8 @@ def _clear_keys(answer, facts):
     out = set()
     for f in facts:
         i = low.find(f.key.lower())
-        if i >= 0 and low[i + len(f.key):].lstrip(" :\t").startswith(("no", "yes")):
+        word = re.match(r"[a-z]+", low[i + len(f.key):].lstrip(" :\t")) if i >= 0 else None
+        if word and word.group(0) in ("no", "yes"):
             out.add(f.key)
     return out
 

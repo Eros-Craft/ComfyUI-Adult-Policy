@@ -24,6 +24,8 @@ UNSAFE answer (see `parse_facts`), so `verdict()` never sees "unknown", only cle
 
 from __future__ import annotations
 
+import re
+
 from dataclasses import dataclass, field
 from typing import Optional
 
@@ -163,9 +165,11 @@ def parse_answer(answer: Optional[str], facts: tuple[Fact, ...]) -> dict[str, bo
         i = low.find(f.key.lower())
         if i >= 0:
             tail = low[i + len(f.key):].lstrip(" :\t")
-            if tail.startswith("no"):
+            word = re.match(r"[a-z]+", tail)          # a whole word: "not sure" and "none" are not a no
+            word = word.group(0) if word else ""
+            if word == "no":
                 value = False
-            elif tail.startswith("yes"):
+            elif word == "yes":
                 value = True
         out[f.key] = f.unsafe if value is None else value      # unknown -> unsafe
     return out
@@ -183,8 +187,10 @@ def parse_facts(raw: dict[str, Optional[str]], facts: tuple[Fact, ...]) -> dict[
     out: dict[str, bool] = {}
     for f in facts:
         answer = (raw.get(f.key) or "").strip().lower()
-        is_no = answer.startswith("n")            # "no", "none", "n"
-        is_yes = answer.startswith("y")           # "yes", "y"
+        word = re.match(r"[a-z]+", answer)
+        word = word.group(0) if word else ""
+        is_no = word in ("no", "n")               # a whole word: "not sure" and "none seen" are not a no
+        is_yes = word in ("yes", "y")
         if is_no and not is_yes:
             out[f.key] = not f.unsafe             # the safe value
         else:
