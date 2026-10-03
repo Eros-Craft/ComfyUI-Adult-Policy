@@ -194,6 +194,12 @@ policy): only the JSON and the reader are derived into packs, so a README edit l
   maintainers; nothing here edits the base). Nothing in `policy/` tells a buyer how to launch ComfyUI, so no caution
   belongs here; the testing thread's smoke binds loopback only.
 - **The Registry**: 1.1.3 and 1.1.4 are flagged and still install, with the fail-open reader (§4).
+- **The workspace's `base/desktop.sh --stand-ins` truncates real model files** (found by the storefront orchestrator,
+  whose project owns the fix): lines 112 to 118 open every path its stand-in manifest lists with `"wb"`, so a real
+  file installed later at a listed path is zeroed (the Character Creator's 8.9 GB Qwen3-VL encoder was). This
+  repository is not exposed: `.github/testing/desktop-check.sh` never calls `desktop.sh` (it only names
+  `desktop.sh --server` as how to build the dev install when its Python is missing), never passes `--stand-ins`, and
+  the smoke writes only under its own scratch `--base-directory` (`comfyui_smoke.py:156`), never into a model path.
 - **The age check reads apparent age within a wide band** (open, 2026-10-03, owned by the "Age check safety margin"
   thread). Anima's canary with the shared Qwen3-VL age question, under an "under 30?" proxy, missed 3 of 5 adults
   aged 20 to 24. The proposal is a "Challenge 25" margin, measured on adults only first (no minors data, ever). That
