@@ -27,7 +27,8 @@ Verda release check.
 | T3 read as a buyer | corrected in this PR | `policy/README.md` had four stale statements (§2); `POLICY.md` read clean |
 | T4 Verda | inherited, not run | the first adopter's release check, Qwen 2.1 V1.4.0 (`docs/verda-release.md` in that repository): not run |
 
-**Ready to sell (D1): not yet.** What is left is Qwen 2.1's T1 Desktop sweep, T2 render and T4 (not run),
+**Live defect first:** published pack 1.1.4 still installs with a fail-open answer reader; the fix, PR #12, waits for
+the owner (§4, §6). **Ready to sell (D1): not yet.** What is left is Qwen 2.1's T1 Desktop sweep, T2 render and T4 (not run),
 and the owner's merges of ErosCraft #45 and #46, plus Qwen 2.1's one re-derive to 0.1.1. Nothing in `policy/` itself is
 red.
 
@@ -65,9 +66,14 @@ created or used by this project. GitHub Actions on this public repository cost n
   publishing. It also must not run before ErosCraft #45 is merged, or it deletes `policy/`.
 - **The other workflows' adoption**: Wan 2.2 compared equal, MiniMax H3 compared equal through its entry (#9),
   Krea 2, the Character Creator and Anima not compared. Each is its own project's change (`README.md`, "The order").
-- **Registry**: versions 1.1.3 and 1.1.4 are `NodeVersionStatusFlagged` (read from `api.comfy.org/nodes/
-  comfyui-qwen21-adult-policy/versions` this session), so Manager will not install them until a human review. The
-  node's `repository` still reads the old name until the next publish. Both are the Qwen 2.1 project's (D3).
+- **A live safety defect in a public version (urgent).** The published pack 1.1.4 (and 1.1.3) still installs:
+  `api.comfy.org/nodes/comfyui-qwen21-adult-policy/install?version=1.1.4` answers with a `downloadUrl` although the
+  version reads `NodeVersionStatusFlagged`, and that `cdn.comfy.org/.../1.1.4/node.zip` answers 200, 29,207 bytes
+  (both read this session). Qwen 2.1 measured at 14:20 UTC that it loads in ComfyUI 0.38.2 and that its answer reader
+  fails open: "minor: no idea", "minor: no (but unsure)" and "minor: no" followed by "minor: yes" all read as a clear
+  no. The fix is 1.1.5, the strict reader (policy repository PR #12, Qwen 2.1's export), which waits for the owner
+  (§6, first row). An earlier line here said a flagged version cannot be installed; that was wrong.
+- **Registry**: the node's `repository` still reads the old name until the next publish (Qwen 2.1's, D3).
 
 ## 5. Decisions made
 
@@ -95,8 +101,9 @@ which `test_h3_rewords_only_its_five_stops` holds. Revisit when a second workflo
 Qwen 2.1 project owns the node pack, its versions and every Registry publish. A change to the pack's code arrives
 only through an export (`.github/CONTRIBUTING.md`).
 
-**D4. PR #4 (pack 1.1.5, the bare-no reader) stays open until the 1.4.0 export supersedes it** (agreeing with the
-13:21 comment on it): merging it would publish from the export instead of the source.
+**D4. PR #4 (pack 1.1.5, the bare-no reader, hand-made here) is superseded by PR #12** (Qwen 2.1's export of
+1.1.5 from its source, D3, agreeing with the 13:21 comment on #4): #4 closes when #12 merges, since merging #4
+would publish from the export instead of the source.
 
 **D5. `tests` is not a required check on `main`** (the testing thread, PR #11): exports push to `main` directly.
 
@@ -135,11 +142,11 @@ policy): only the JSON and the reader are derived into packs, so a README edit l
 
 | What | Why it waits | Who |
 |---|---|---|
+| **First, a live safety defect:** merge and publish policy repository PR #12 (pack 1.1.5, the strict answer reader). Published 1.1.4 and 1.1.3 still install from the Registry and its CDN and read "minor: no idea" as a clear no (§4) | Qwen 2.1's permission check refused it as creating a public surface | the owner |
 | ErosCraft #45, then #46 (publish_pack keeps `policy/`, targets the new name, writes the Checks and community files) | the session permission check refuses an unreviewed merge | the owner |
 | `python3 tools/github_settings.py --repo Eros-Craft/ComfyUI-Adult-Policy` on the Mac (labels, rulesets, security settings) | the cloud proxy refuses repository-settings writes | the owner |
 | The Claude GitHub App on this repository | an installation is the owner's | the owner |
 | Whether to hold explicit real-photo edits until "Consent in person" ships (stricter than rule 3; the design names UK s.66I and asks for a lawyer's read before any sale) | rule 3 and `POLICY.md` move only on the owner's own words (D9) | the owner, with a legal review |
-| Policy repository PR #12, Qwen 2.1's pack 1.1.5 export (a Registry publish) | Qwen 2.1's permission check refused it as creating a public surface; nothing was published | the owner |
 | The `COMFY_API_KEY` repository secret, for `comfy-cloud.yml`'s Cloud rows | a secret value is the owner's | the owner |
 
 ## 7. Session roster (this project, 2026-10-03 14:15 UTC)
@@ -172,7 +179,7 @@ policy): only the JSON and the reader are derived into packs, so a README edit l
   web origin call the local ComfyUI API (found by the storefront orchestrator; the request is with the base's
   maintainers; nothing here edits the base). Nothing in `policy/` tells a buyer how to launch ComfyUI, so no caution
   belongs here; the testing thread's smoke binds loopback only.
-- **The Registry**: 1.1.3 and 1.1.4 flagged (§4), sent to the Qwen 2.1 orchestrator by the testing thread.
+- **The Registry**: 1.1.3 and 1.1.4 are flagged and still install, with the fail-open reader (§4).
 - **The age check reads apparent age within a wide band** (open, 2026-10-03, owned by the "Age check safety margin"
   thread). Anima's canary with the shared Qwen3-VL age question, under an "under 30?" proxy, missed 3 of 5 adults
   aged 20 to 24. The proposal is a "Challenge 25" margin, measured on adults only first (no minors data, ever). That
