@@ -1,0 +1,35 @@
+name: Something is wrong
+description: A node errors, stops something it should not, or the picker or chat page misbehaves.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Attach nothing explicit, and never an image of a minor or of anyone who could be one. Describe a prompt in words. Something that gets past a gate or a rule is a [private security report](https://github.com/Eros-Craft/ComfyUI-Qwen21-Adult-Policy/security/advisories/new), not an issue.
+  - type: input
+    id: version
+    attributes:
+      label: Pack version
+      description: The version ComfyUI-Manager shows, or the one in pyproject.toml.
+    validations:
+      required: true
+  - type: input
+    id: comfyui
+    attributes:
+      label: ComfyUI version, operating system and GPU
+      placeholder: ComfyUI 0.38.2, Ubuntu 24.04, RTX PRO 6000
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what should have
+      description: The node, the gates' positions, and the message the node gave.
+    validations:
+      required: true
+  - type: textarea
+    id: log
+    attributes:
+      label: ComfyUI's log around the error
+      description: Keys and tokens removed.
+      render: text
