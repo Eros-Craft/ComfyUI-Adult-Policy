@@ -1,0 +1,106 @@
+# The free tests, on every pull request, on main and nightly: the policy, the Registry's rules, and the pack inside a
+# real ComfyUI on the CPU on Linux (Verda and Comfy's GPUs), macOS (Comfy Desktop on the Mac) and Windows (Desktop on
+# Windows). Nothing renders, nothing is downloaded but ComfyUI and CPU torch, nothing is spent.
+# What each venue proves and what it cannot: .github/testing/TESTING.md. The Cloud side is comfy-cloud.yml.
+name: tests
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "17 4 * * *"      # nightly: a new ComfyUI release, and ComfyUI's master, reach the pack before a person does
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  DO_NOT_TRACK: "1"
+  COMFY_NO_TELEMETRY: "1"
+
+jobs:
+  policy:
+    name: policy (${{ matrix.os }}, Python ${{ matrix.python }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-latest, python: "3.10" }     # pyproject's floor
+          - { os: ubuntu-latest, python: "3.12" }     # what Comfy Desktop bundles
+          - { os: ubuntu-latest, python: "3.14" }     # the newest
+          - { os: macos-latest, python: "3.12" }
+          - { os: windows-latest, python: "3.12" }
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
+        with:
+          python-version: ${{ matrix.python }}
+      - name: python policy/test_policy.py (warnings are errors)
+        env:
+          PYTHONWARNINGS: error
+          PYTHONUTF8: "1"
+        run: python policy/test_policy.py
+
+  registry:
+    name: registry rules
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7  # v10.2.0
+      - name: what the pack export and the Registry would refuse
+        run: python3 .github/testing/house_rules.py
+      - name: comfy node validate (the Registry's own checks)
+        run: |
+          uv tool install -q comfy-cli
+          comfy node validate
+
+  comfyui:
+    name: ComfyUI ${{ matrix.ref }} (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        ref: [latest]
+        include:
+          # ComfyUI's master, nightly and by hand only: it warns of a break before a release carries it, and never
+          # blocks a pull request over a change nobody here made
+          - { os: ubuntu-latest, ref: master, canary: true }
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        if: ${{ !matrix.canary || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/comfyui-smoke
+        if: ${{ !matrix.canary || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+        with:
+          comfyui-ref: ${{ matrix.ref }}
+          venue: ci
+          artifact-name: smoke-${{ matrix.ref }}-${{ matrix.os }}
+
+  # The one name a ruleset requires: it passes only when every job above passed.
+  tests:
+    if: ${{ always() }}
+    needs: [policy, registry, comfyui]
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: every job passed
+        env:
+          RESULTS: ${{ join(needs.*.result, ' ') }}
+        run: |
+          echo "results: $RESULTS"
+          for r in $RESULTS; do [ "$r" = success ] || { echo "::error::a test job ended $r"; exit 1; }; done
