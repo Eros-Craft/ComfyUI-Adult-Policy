@@ -16,6 +16,11 @@ jobs:
     name: Publish Custom Node to registry
     runs-on: ubuntu-latest
     if: ${{ github.repository_owner == 'Eros-Craft' }}
+    # A Registry version is public and permanent, so the job waits for the owner's approval: the `registry`
+    # environment names the owner as its required reviewer, allows main only, and holds REGISTRY_ACCESS_TOKEN
+    # (ErosCraft tools/github_settings.py). That environment must exist BEFORE this line reaches main: a job
+    # naming an environment that does not exist creates it with no protection.
+    environment: registry
     steps:
       # Every action is pinned to a full commit SHA, since this job holds the Registry token; Dependabot moves the pins.
       - name: Check out code
