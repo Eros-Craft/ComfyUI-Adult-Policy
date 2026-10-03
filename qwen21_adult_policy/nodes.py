@@ -74,7 +74,7 @@ def _answer(raw):
         return None
     text = str(raw)
     if THINK_END in text:
-        return text.split(THINK_END)[-1]
+        return text.split(THINK_END, 1)[1]      # a second close tag stays in the answer, which makes it unclear
     if THINK_START in text:
         return None
     return text
