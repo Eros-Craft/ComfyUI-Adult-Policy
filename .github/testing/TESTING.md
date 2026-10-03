@@ -80,7 +80,9 @@ or a "CI cannot"/"Cloud cannot" row with its reason.
    ruleset that required `tests` would refuse every release. Read `tests` on the pull request instead: a red one is
    not merged. `comfy-cloud` answers for the Registry and Cloud, which a pull request cannot fix, so it never gates.
 3. **Notifications**: a red nightly `tests` (a new ComfyUI release or master broke the pack) or a red Monday
-   `comfy-cloud` (the Registry flagged a version, or Cloud moved its ComfyUI) emails the repository's watchers.
+   `comfy-cloud` (the Registry flagged a version, or Cloud moved its ComfyUI) emails the repository's watchers. A
+   flagged version still installs by id and version (`comfy node registry-install`, measured 2026-10-03); what it
+   loses is ComfyUI-Manager's list, which hides a node whose listing has no `latest_version`.
 
 ## Where these files live, and why
 
