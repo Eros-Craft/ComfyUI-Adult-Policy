@@ -27,7 +27,9 @@ its module folder instead (Qwen 2.1 does, since its 1.4.0 source).
 | `eroscraft-character-creator-krea-2` | image | ComfyUI-Krea2CC-Gate | request, inputs, output | not yet |
 | `eroscraft-image-creator-anima` | image | none yet (a stub) | request, inputs, output | not yet |
 
-"Not yet" means that workflow's pack has not been compared with the file, so its checkpoints above are a first
+Version 0.1.2 rewords the request's "unclear" stop (rerunning gets the same answer, so it asks for a reworded request).
+A pack that copied its words before then shows the old sentence until it re-derives; `CHANGED_IN` in `test_policy.py`
+lists each version's changed words, and every other word must still be equal. "Not yet" means that workflow's pack has not been compared with the file, so its checkpoints above are a first
 guess its session confirms when it adopts. A new workflow adds its own row to `workflows` in the same change that
 wires it in.
 

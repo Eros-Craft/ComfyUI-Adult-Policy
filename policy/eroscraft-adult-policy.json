@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "name": "ErosCraft adult policy",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "status": "draft",
   "document": "POLICY.md",
 
@@ -112,7 +112,7 @@
       }
     },
     "unclear": {
-      "request": "The safety check could not get a clear answer, so nothing was made. That is not a finding about your request: run it again, and if it stops again, the console line says why.",
+      "request": "The safety check could not get a clear answer, so nothing was made. That is not a finding about your request: the same words and photos always get the same answer, so running it again will not help. Reword it, naming who is in it and an adult age (\"a woman in her late twenties\"), or use a different photo. If it still stops, the console line says why.",
       "output": {
         "image": "The safety check could not get a clear answer about the finished image, so it was not saved. That is not a finding about the image: run it again, and if it stops again, the console line says why.",
         "video": "The safety check could not get a clear answer about the finished video, so it was not saved. That is not a finding about the video: run it again, and if it stops again, the console line says why."
