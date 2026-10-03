@@ -124,7 +124,8 @@ explicit path, a watermark on every output, and "Consent in person" as an option
 ("Changing this policy") both say the gates and rules move only on the owner's own words, which a relay is not. So
 `POLICY.md` stays as it is. If the owner decides to hold real-photo edits until in-person consent ships (the
 design names UK s.66I and asks for a lawyer's read before any sale, §7 of that spec), the change is a new stop in
-the JSON's messages and a refusal in each pack's engine, made in one PR here and then re-derived by every adopter.
+the JSON's messages and a refusal in each pack's engine, made in one PR here and then re-derived by every adopter. **Resolved** the same day: the storefront orchestrator confirmed rule 3,
+withdrew the claim (the hold was its own decision, not the owner's), and matches and links `POLICY.md` instead.
 
 **D6. A policy README edit needs no version bump** (`POLICY.md`, "Changing this policy", bumps on a change to the
 policy): only the JSON and the reader are derived into packs, so a README edit leaves every adopter's copy equal.
@@ -136,6 +137,7 @@ policy): only the JSON and the reader are derived into packs, so a README edit l
 | ErosCraft #45, then #46 (publish_pack keeps `policy/`, targets the new name, writes the Checks and community files) | the session permission check refuses an unreviewed merge | the owner |
 | `python3 tools/github_settings.py --repo Eros-Craft/ComfyUI-Adult-Policy` on the Mac (labels, rulesets, security settings) | the cloud proxy refuses repository-settings writes | the owner |
 | The Claude GitHub App on this repository | an installation is the owner's | the owner |
+| Whether to hold explicit real-photo edits until "Consent in person" ships (stricter than rule 3; the design names UK s.66I and asks for a lawyer's read before any sale) | rule 3 and `POLICY.md` move only on the owner's own words (D9) | the owner, with a legal review |
 | The `COMFY_API_KEY` repository secret, for `comfy-cloud.yml`'s Cloud rows | a secret value is the owner's | the owner |
 
 ## 7. Session roster (this project, 2026-10-03 14:15 UTC)
