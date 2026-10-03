@@ -1,0 +1,84 @@
+# The Comfy platform's side of this pack (T2): weekly, by hand, and on a change to these checks. Free and read only:
+# no job is queued on Comfy Cloud and no credit is spent from this repository, ever.
+#
+#   check    the Comfy Registry (the newest version is Active and not ahead of pyproject.toml), Comfy Cloud's ComfyUI
+#            version and whether the pack's node classes are in Cloud's library (.github/testing/cloud_check.py)
+#   parity   the CPU smoke at exactly the ComfyUI version Comfy Cloud runs, so the pack is proven on the ComfyUI
+#            Comfy's GPUs serve today, not only on the newest release
+#
+# Renders of the policy (a stop through a real run, an image out) belong to each workflow repository's own
+# comfy-cloud.yml, on a deployment that carries the pack, and to the Verda release check: Comfy Cloud runs only its
+# own node library, and is safe-for-work only. .github/testing/TESTING.md has the whole ladder.
+#
+# Settings, once (names only; a value never goes in a file): the repository secret COMFY_API_KEY (the key from
+# platform.comfy.org). Without it the Cloud rows say "skipped" and the parity run tests the newest release instead.
+name: comfy-cloud
+
+on:
+  schedule:
+    - cron: "41 5 * * 1"      # Mondays: Cloud moves its ComfyUI without telling anyone
+  workflow_dispatch:
+  pull_request:               # only a change to this check itself; the Registry's verdict is advisory there
+    paths:
+      - .github/testing/cloud_check.py
+      - .github/testing/comfyui_smoke.py
+      - .github/actions/comfyui-smoke/**
+      - .github/workflows/comfy-cloud.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: comfy-cloud-${{ github.repository }}
+  cancel-in-progress: false
+
+env:
+  DO_NOT_TRACK: "1"
+  COMFY_NO_TELEMETRY: "1"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      comfyui: ${{ steps.check.outputs.comfyui }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7  # v10.2.0
+      - name: comfy-cli
+        run: uv tool install -q comfy-cli
+      - name: the Registry and Comfy Cloud, read only
+        id: check
+        env:
+          COMFY_API_KEY: ${{ secrets.COMFY_API_KEY }}
+          EVENT: ${{ github.event_name }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/cloud"
+          advisory=(); [ "$EVENT" = pull_request ] && advisory=(--advisory registry)
+          python3 .github/testing/cloud_check.py --github-output --json "$RUNNER_TEMP/cloud/report.json" \
+            "${advisory[@]}"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7.0.1
+        if: ${{ !cancelled() }}
+        with:
+          name: comfy-cloud-check
+          path: ${{ runner.temp }}/cloud/
+          retention-days: 30
+          if-no-files-found: ignore
+
+  parity:
+    needs: check
+    # runs whatever the Registry said: a Flagged version is no reason to skip proving the code on Cloud's ComfyUI
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/comfyui-smoke
+        with:
+          comfyui-ref: ${{ needs.check.outputs.comfyui || 'latest' }}
+          venue: cloud-parity
+          artifact-name: smoke-cloud-parity

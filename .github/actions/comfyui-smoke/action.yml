@@ -1,0 +1,90 @@
+name: ComfyUI smoke
+description: >-
+  A CPU ComfyUI at one ref, the pack installed from the node.zip the Registry would ship, and
+  .github/testing/comfyui_smoke.py run against it. Free: nothing renders and no model is downloaded.
+
+inputs:
+  comfyui-ref:
+    description: "latest (the newest v* release), master, or a tag such as v0.38.2"
+    default: latest
+  venue:
+    description: "the report's venue: ci or cloud-parity"
+    default: ci
+  python-version:
+    description: "the Python ComfyUI runs on (Comfy Desktop bundles 3.12)"
+    default: "3.12"
+  artifact-name:
+    description: "the name the report is uploaded under"
+    required: true
+
+outputs:
+  comfyui:
+    description: "the ComfyUI ref that was tested"
+    value: ${{ steps.ref.outputs.ref }}
+
+runs:
+  using: composite
+  steps:
+    - name: the ComfyUI ref
+      id: ref
+      shell: bash
+      env:
+        WANT: ${{ inputs.comfyui-ref }}
+      run: |
+        ref="$WANT"
+        if [ "$ref" = latest ] || [ -z "$ref" ]; then
+          ref=$(git ls-remote --tags --refs https://github.com/comfyanonymous/ComfyUI 'v*' \
+                | awk -F/ '{print $3}' | sort -V | tail -1)
+        fi
+        echo "ref=$ref" >> "$GITHUB_OUTPUT"
+        echo "ComfyUI $ref" >> "$GITHUB_STEP_SUMMARY"
+
+    - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7  # v10.2.0
+
+    - name: ComfyUI on the CPU
+      shell: bash
+      env:
+        REF: ${{ steps.ref.outputs.ref }}
+        PYV: ${{ inputs.python-version }}
+      run: |
+        dir="$RUNNER_TEMP/ComfyUI"
+        git clone -q --depth 1 --branch "$REF" https://github.com/comfyanonymous/ComfyUI "$dir"
+        cd "$dir"
+        uv venv -q -p "$PYV" .venv
+        py=.venv/bin/python; [ -x "$py" ] || py=.venv/Scripts/python.exe
+        uv pip install -q -p "$py" torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+        uv pip install -q -p "$py" -r requirements.txt
+        echo "COMFYUI_DIR=$dir" >> "$GITHUB_ENV"
+        echo "COMFYUI_PYTHON=$dir/$py" >> "$GITHUB_ENV"
+
+    - name: the node.zip the Registry would ship (comfy node pack)
+      shell: bash
+      run: |
+        uv tool install -q comfy-cli
+        comfy node pack
+        mv node.zip "$RUNNER_TEMP/node.zip"
+      env:
+        DO_NOT_TRACK: "1"
+        COMFY_NO_TELEMETRY: "1"
+
+    - name: the smoke
+      shell: bash
+      env:
+        VENUE: ${{ inputs.venue }}
+      run: |
+        mkdir -p "$RUNNER_TEMP/smoke"
+        python .github/testing/comfyui_smoke.py --comfyui "$COMFYUI_DIR" --python "$COMFYUI_PYTHON" \
+          --zip "$RUNNER_TEMP/node.zip" --venue "$VENUE" \
+          --json "$RUNNER_TEMP/smoke/report.json" --log "$RUNNER_TEMP/smoke/comfyui.log"
+
+    - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7.0.1
+      if: ${{ !cancelled() }}
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: ${{ runner.temp }}/smoke/
+        retention-days: 30
+        if-no-files-found: ignore
