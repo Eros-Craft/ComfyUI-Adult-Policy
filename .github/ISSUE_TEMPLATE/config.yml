@@ -1,5 +1,5 @@
 blank_issues_enabled: false
 contact_links:
   - name: A way around a gate or a rule (private)
-    url: https://github.com/Eros-Craft/ComfyUI-Qwen21-Adult-Policy/security/advisories/new
+    url: https://github.com/Eros-Craft/ComfyUI-Adult-Policy/security/advisories/new
     about: Report it privately, never as a public issue.

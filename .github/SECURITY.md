@@ -7,7 +7,7 @@ server this pack runs on, or lets a Civitai key reach a page.
 ## Report one privately
 
 Use GitHub's private vulnerability reporting:
-[Report a vulnerability](https://github.com/Eros-Craft/ComfyUI-Qwen21-Adult-Policy/security/advisories/new) (the Security tab of this
+[Report a vulnerability](https://github.com/Eros-Craft/ComfyUI-Adult-Policy/security/advisories/new) (the Security tab of this
 repository). Please do not open a public issue for it.
 
 Say which version (the `version` in `pyproject.toml`, or what ComfyUI-Manager shows), what you did, and what passed
