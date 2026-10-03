@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "name": "ErosCraft adult policy",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "status": "draft",
   "document": "POLICY.md",
 
@@ -155,7 +155,20 @@
       "pack": "ComfyUI-H3-Adult-Policy",
       "checkpoints": ["request", "inputs", "output"],
       "civitai_picker": false,
-      "words_checked": null
+      "words_checked": "2026-10-03",
+      "messages": {
+        "request": {
+          "minor": "That asks for someone under 18, so nothing was made. ErosCraft is adults only, and this check cannot be turned off. If everyone is an adult, say so in the prompt (for example \"a woman in her 30s\") and run again.",
+          "anyone_under_18": "Someone in a reference photo or clip reads as under 18, so nothing was made. ErosCraft is adults only, and this check cannot be turned off. Use a different photo or clip, one where everyone is clearly an adult."
+        },
+        "output": {
+          "anyone_under_18": "A frame of the finished video reads as someone under 18, so it was not saved. ErosCraft is adults only, and this check cannot be turned off. Make every age clear in the prompt, or change the references, and run again."
+        },
+        "unclear": {
+          "request": "The safety check could not get a clear answer, so nothing was made. That is not a finding about your request: run it again, and if it stops again, the server log (the terminal ComfyUI runs in) says why: look for the line starting [ErosCraft.",
+          "output": "The safety check could not get a clear answer about the finished video, so it was not saved. That is not a finding about the video: run it again, and if it stops again, the server log (the terminal ComfyUI runs in) says why: look for the line starting [ErosCraft."
+        }
+      }
     },
     "eroscraft-image-creator-krea-2": {
       "media": "image",
