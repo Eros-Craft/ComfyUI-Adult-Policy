@@ -124,6 +124,17 @@ re-derives, so it is made once, as 1.0.0, when Qwen 2.1's Verda release check pa
 not before, and not while the age-check finding (§8) is open: until a run on a buyer's machine has shown the stops,
 "draft" is the honest word.
 
+**D11. An additive age margin, `age_margin` at 25, may ship without the owner once measured** (the "Age check safety
+margin" thread, 2026-10-03; its full note is `notes/age-margin.md` in the project's shared files). A second image-only
+fact, asked in the same call as `anyone_under_18`, where either "yes" stops; the text fact `minor` gets none. The
+file goes 0.1.1 to 0.2.0, and merges only after an adults-only measurement passes. Its grounds: `POLICY.md` lets a
+check be added and refuses only weakening, rule 3 (`eroscraft/CLAUDE.md:30-34`, `:42-44`) protects the rules from
+removal or moving, and `adult_policy.py`'s `validate` refuses only weakening. Nothing is removed or moved, and the
+measured `anyone_under_18` wording stays, so every adopter's words still match. Each adopter's engine must ask the
+new fact before it has any effect. Cost to note for that measurement: the margin also stops finished images of adults
+aged 18 to 24 whose request the text check passed, so it needs its false-stop rate on adults 18 to 24 and 25 to 30
+reported, not only its catch rate.
+
 **D9. Real-photo edits stay on ✅ Consent; the policy is not changed to hold them** (2026-10-03, on the storefront
 orchestrator's report, relayed by the coordinator, that `eroscraft/CLAUDE.md` rule 3 holds explicit real-photo edits
 until "Consent in person" ships). Rule 3 says the opposite: "An explicit edit of a real photo runs on ✅ Consent
@@ -145,6 +156,7 @@ policy): only the JSON and the reader are derived into packs, so a README edit l
 | What | Why it waits | Who |
 |---|---|---|
 | **First, a live safety defect:** merge and publish policy repository PR #12 (pack 1.1.5, the strict answer reader). Published 1.1.4 and 1.1.3 still install from the Registry and its CDN and read "minor: no idea" as a clear no (§4) | Qwen 2.1's permission check refused it as creating a public surface | the owner |
+| The age margin's edit to `policy/eroscraft-adult-policy.json` (0.2.0, D11): no branch or PR exists yet; every value and test is in `notes/age-margin.md` | the "Age check safety margin" thread's permission check refused it as modifying a shared resource; it also waits on the adults-only measurement | the owner |
 | ErosCraft #45, then #46 (publish_pack keeps `policy/`, targets the new name, writes the Checks and community files) | the session permission check refuses an unreviewed merge | the owner |
 | `python3 tools/github_settings.py --repo Eros-Craft/ComfyUI-Adult-Policy` on the Mac (labels, rulesets, security settings) | the cloud proxy refuses repository-settings writes | the owner |
 | The Claude GitHub App on this repository | an installation is the owner's | the owner |
@@ -162,7 +174,7 @@ policy): only the JSON and the reader are derived into packs, so a README edit l
 | Draft the shared adult policy | policy PRs #6, #7, ErosCraft #45 | done, resolved | none |
 | Wire the policy into Qwen 2.1 | Qwen 2.1 #47, #48, #49 | done, resolved | none |
 | Rename the policy repo (the Mac) | the rename | done, resolved | none |
-| Age check safety margin | the open finding below (§8): whether and how to tighten the age question | working | a measured change or a proposal; until then nobody edits the JSON's or `POLICY.md`'s age question |
+| Age check safety margin | the open finding below (§8) and its change, D11 | designed; the edit waits on approval and on the measurement | the adults-only measurement; until it lands nobody else edits the JSON's or `POLICY.md`'s age question |
 | Weekly policy adoption check (a routine) | reads each workflow's adoption state weekly | review ready | next weekly run |
 
 ## 9. Requests to other projects (sent through the coordinator; nothing edited in their repositories)
@@ -185,8 +197,11 @@ policy): only the JSON and the reader are derived into packs, so a README edit l
 - **The age check reads apparent age within a wide band** (open, 2026-10-03, owned by the "Age check safety margin"
   thread). Anima's canary with the shared Qwen3-VL age question, under an "under 30?" proxy, missed 3 of 5 adults
   aged 20 to 24. The proposal is a "Challenge 25" margin, measured on adults only first (no minors data, ever). That
-  thread decides whether the rules allow the tightening and ships the change or a proposal; `POLICY.md` already
-  calls the age check "asked and failing closed", not measured, for the 8B.
+  thread decided the tightening is allowed (D11) and designed it; the adults-only measurement is with Qwen 2.1 and
+  Anima's canary. `POLICY.md` already calls the age check "asked and failing closed", not measured, for the 8B. Side
+  finding from that thread: the current age question's line "(Any adult, including a young-looking adult, is NOT
+  under 18.)" nudges the checker toward passing young faces; the margin is designed to sit beside it rather than
+  reword it, so the measured wording every pack shows stays equal.
 
 ## Sessions
 
