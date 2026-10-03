@@ -5,6 +5,7 @@ the file gets this test's second half for free: equal words now means adopting t
 
 Optional: `WAN22_POLICIES=/path/to/wan22_adult_policy/policies.py python3 policy/test_policy.py` checks the video
 wording against the Wan 2.2 pack the same way. It lives in the private workspace, so without it that test skips.
+`H3_POLICIES=/path/to/h3_adult_policy/policies.py` does the same for MiniMax H3, through its entry's rewording.
 """
 import copy
 import importlib.util
@@ -88,6 +89,29 @@ def test_matches_wan22_pack():
     _matches(ap.load("eroscraft-video-creator-wan-2.2"), _pack_policies(path, "wan22_policies_under_test"))
 
 
+H3 = "eroscraft-video-creator-minimax-h3"
+# The five stop sentences MiniMax H3 words its own way (compared 2026-10-03). Every other word it shows is the file's.
+H3_REWORDED = {("request", "minor"), ("request", "anyone_under_18"), ("output", "anyone_under_18"),
+               ("unclear", "request"), ("unclear", "output")}
+
+
+def test_matches_h3_pack():
+    path = os.environ.get("H3_POLICIES")
+    if not path:
+        print("skip: H3_POLICIES is unset (the MiniMax H3 pack lives in its own repository)")
+        return
+    _matches(ap.load(H3), _pack_policies(path, "h3_policies_under_test"))
+
+
+def test_h3_rewords_only_its_five_stops():
+    pol, plain = ap.load(H3), ap.load(media="video")
+    changed = {(s, k) for s, entries in plain.messages.items() for k in entries
+               if pol.messages[s][k] != plain.messages[s][k]}
+    assert changed == H3_REWORDED, changed
+    for section, key in H3_REWORDED:                    # a rewording keeps the policy's own sentence, then adds
+        assert pol.messages[section][key].startswith(plain.messages[section][key].split(":")[0]), (section, key)
+
+
 def test_refused_words_agree_with_qwen21():
     mod = _pack_policies(HERE.parent / "qwen21_adult_policy" / "policies.py", "qwen21_policies_under_test")
     pol = ap.load()
@@ -149,7 +173,8 @@ def test_every_workflow_loads():
         pol = ap.load(name)
         assert pol.media == entry["media"] and pol.workflow == name
         assert {"request", "output"} <= set(pol.checkpoints)
-        assert pol.messages["request"]["minor"] == RAW["messages"]["request"]["minor"]
+        reworded = ((entry.get("messages") or {}).get("request") or {}).get("minor")
+        assert pol.messages["request"]["minor"] == (reworded or RAW["messages"]["request"]["minor"])
 
 
 def test_a_workflow_may_reword_a_stop_and_nothing_else():

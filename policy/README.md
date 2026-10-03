@@ -20,7 +20,7 @@ carry it until that pack adopts it.
 |---|---|---|---|---|
 | `eroscraft-image-creator-qwen-2.1` | image | ComfyUI-Qwen21-Adult-Policy | request, rewrite, inputs, output | 2026-10-03, equal |
 | `eroscraft-video-creator-wan-2.2` | video | ComfyUI-Wan22-Adult-Policy | request, inputs, output | 2026-10-03, equal |
-| `eroscraft-video-creator-minimax-h3` | video | ComfyUI-H3-Adult-Policy | request, inputs, output | not yet |
+| `eroscraft-video-creator-minimax-h3` | video | ComfyUI-H3-Adult-Policy | request, inputs, output | 2026-10-03, equal with five stops reworded in its entry |
 | `eroscraft-image-creator-krea-2` | image | ComfyUI-Krea2-Adult-Policy | request, rewrite, inputs, output | not yet |
 | `eroscraft-character-creator-krea-2` | image | ComfyUI-Krea2CC-Gate | request, inputs, output | not yet |
 | `eroscraft-image-creator-anima` | image | none yet (a stub) | request, inputs, output | not yet |
