@@ -166,7 +166,7 @@ policy): only the JSON and the reader are derived into packs, so a README edit l
 | What | Why it waits | Who |
 |---|---|---|
 | **First, a live safety defect:** merge and publish policy repository PR #12 (pack 1.1.5, the strict answer reader). Published 1.1.4 and 1.1.3 still install from the Registry and its CDN and read "minor: no idea" as a clear no (§4) | Qwen 2.1's permission check refused it as creating a public surface | the owner |
-| The age margin's edit to `policy/eroscraft-adult-policy.json` (0.2.0, D11): no branch or PR exists yet; every value and test is in `notes/age-margin.md` | the "Age check safety margin" thread's permission check refused it as modifying a shared resource; it also waits on the adults-only measurement | the owner |
+| The age margin (0.2.0, D11): the owner decides (a) the render venue for the adults-only measurement, (b) the exemptions to the render floor of 25 (ages 18 to 24 must render) and to the SFW screen (it refuses the pinned age question), and (c) the budget, about 627 credits by Anima's estimate; or chooses to ship the margin marked "unmeasured". The edit to `policy/eroscraft-adult-policy.json` has no branch or PR yet; every value and test is in `notes/age-margin.md`. Qwen 2.1 PR #51 (in progress) prefills the checker's answer label, so once it merges any measurement is asked again with it | Anima parked the measurement on four blockers (2026-10-03, relayed by the coordinator): no allowed render venue (Anima reports Comfy deployments run on RunPod Serverless, which `eroscraft/CLAUDE.md` rule 2 forbids, and the Mac never renders, root `CLAUDE.md` §0.5), the SFW screen, the render floor and the cost. The edit itself was also refused by the "Age check safety margin" thread's permission check as modifying a shared resource | the owner |
 | ErosCraft #45, then #46 (publish_pack keeps `policy/`, targets the new name, writes the Checks and community files) | the session permission check refuses an unreviewed merge | the owner |
 | `python3 tools/github_settings.py --repo Eros-Craft/ComfyUI-Adult-Policy` on the Mac (labels, rulesets, security settings) | the cloud proxy refuses repository-settings writes | the owner |
 | The Claude GitHub App on this repository | an installation is the owner's | the owner |
@@ -184,7 +184,7 @@ policy): only the JSON and the reader are derived into packs, so a README edit l
 | Draft the shared adult policy | policy PRs #6, #7, ErosCraft #45 | done, resolved | none |
 | Wire the policy into Qwen 2.1 | Qwen 2.1 #47, #48, #49 | done, resolved | none |
 | Rename the policy repo (the Mac) | the rename | done, resolved | none |
-| Age check safety margin | the open finding below (§8) and its change, D11 | designed; the edit waits on approval and on the measurement | the adults-only measurement; until it lands nobody else edits the JSON's or `POLICY.md`'s age question |
+| Age check safety margin | the open finding below (§8) and its change, D11 | designed; the measurement is parked on four owner decisions (§6) | the owner's answer, then the measurement, asked again once Qwen 2.1 #51 merges; until it lands nobody else edits the JSON's or `POLICY.md`'s age question |
 | Weekly policy adoption check (a routine) | reads each workflow's adoption state weekly | review ready | next weekly run |
 
 ## 9. Requests to other projects (sent through the coordinator; nothing edited in their repositories)
