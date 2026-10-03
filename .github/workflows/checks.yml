@@ -1,0 +1,70 @@
+name: Checks
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+# The checks only read the files, so GITHUB_TOKEN gets nothing it could write with.
+permissions:
+  contents: read
+
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      # Pinned to a full commit SHA like the publish job's; Dependabot moves the pin.
+      - name: Check out code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - name: The Registry's security rules (exec, eval, two statements on one line)
+        run: pipx run ruff check --isolated --no-cache --output-format concise --select S102,S307,E702 .
+      - name: Every file parses, and holds nothing an export would refuse
+        run: |
+          python3 - <<'PY'
+          import json, pathlib, re, subprocess, sys
+          # The refusals of the export (eroscraft/_build/publish_pack.py, FORBIDDEN), built by code point so this file
+          # holds none of them. The licence is kept verbatim, so it is the one file not read.
+          FORBIDDEN = (
+              ("the other brand's name", re.compile("soul" + "-?craft", re.I)),
+              ("an em dash", re.compile("|".join(re.escape(x) for x in (chr(0x2014), "\\" + "u" + "2014", "&" + "mdash;", "&#" + "8212;")))),
+              ("a token-shaped string", re.compile(r"hf_[A-Za-z0-9]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|sk-[A-Za-z0-9]{20,}"
+                                                   r"|BEGIN [A-Z ]*PRIVATE KEY|(?<![0-9a-f])[0-9a-f]{32}(?![0-9a-f])")),
+              ("a path under /Users/", re.compile(r"/Users/[A-Za-z]")),
+          )
+          bad = []
+          tracked = subprocess.run(["git", "ls-files", "-z"], capture_output=True, check=True).stdout.decode("utf-8")
+          for rel in filter(None, tracked.split("\0")):
+              path = pathlib.Path(rel)
+              if path.name == ".DS_Store":
+                  bad.append(f"{rel}: a .DS_Store")
+              if rel == "LICENSE" or not path.is_file():
+                  continue
+              data = path.read_bytes()
+              text = data.decode("utf-8", errors="replace")
+              for what, rx in FORBIDDEN:
+                  for hit in rx.finditer(text):
+                      bad.append(f"{rel}:{text.count(chr(10), 0, hit.start()) + 1}: {what}")
+              try:
+                  if rel.endswith(".py"):
+                      compile(data, rel, "exec")
+                  elif rel.endswith(".json"):
+                      json.loads(text)
+              except (SyntaxError, ValueError) as e:
+                  bad.append(f"{rel}: does not parse ({e})")
+          print("\n".join(bad) or "every tracked file parses and is clean")
+          sys.exit(1 if bad else 0)
+          PY
+      - name: The shared policy's own test
+        if: hashFiles('policy/test_policy.py') != ''
+        env:
+          PYTHONWARNINGS: error
+        run: python3 policy/test_policy.py

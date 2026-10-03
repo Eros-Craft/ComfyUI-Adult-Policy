@@ -103,10 +103,9 @@ workflow's build reads it from here (a checkout beside the workspace, named by a
 `eroscraft.env`, the way `COMFY_BASE` names the base) and copies it into its pack. The Qwen 2.1 node pack also
 published from this repository is an export, as `.github/CONTRIBUTING.md` says; this folder is not.
 
-**Before the next pack export:** the workspace's `eroscraft/_build/publish_pack.py` removes every public file
-outside its `KEEP` list and rewrites `.comfyignore` to `.github/` alone, so as it stands the next Qwen 2.1 export
-would delete this folder. It needs `"policy"` added to `KEEP` and `policy/` added to `COMFYIGNORE`, a two-line
-change in the workspace.
+**The pack export:** the workspace's `eroscraft/_build/publish_pack.py` exports the Qwen 2.1 pack to this
+repository, `Eros-Craft/ComfyUI-Adult-Policy`, and leaves `policy/` in place and out of the Registry's `node.zip`
+(Eros-Craft/ErosCraft#45). The pack keeps its own name, Registry node id and module; only the repository was renamed.
 
 The words were compared with the pack as exported here (1.1.4). The pack's source in the private Qwen 2.1
 repository is ahead of that (1.4.0), so the session that wires it in runs the same comparison against its own copy
