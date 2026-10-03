@@ -6,7 +6,9 @@
 Rows, in the ErosCraft test-report format (the same one comfyui_smoke.py writes):
 
     registry         the newest version on the Comfy Registry (where Manager, Desktop and Cloud install from) is
-                     Active, and it is the version pyproject.toml names, or older while a release is under way
+                     Active, and it is the version pyproject.toml names, or older while a release is under way. A
+                     Flagged version still installs by id and version, but the listing names no latest_version, so
+                     ComfyUI-Manager's list hides the pack: red, with the listing's answer in the row
     cloud-comfyui    the ComfyUI version Comfy Cloud runs, from `comfy --where cloud system-stats`; the parity job
                      runs the CPU smoke at exactly that version
     cloud-nodes      whether the pack's node classes are in Cloud's node library (`comfy --where cloud nodes ls`).
@@ -40,8 +42,11 @@ if not ENV.get("COMFY_CLOUD_API_KEY") and ENV.get("COMFY_API_KEY"):
 VERDICT = {
     "NodeVersionStatusActive": (True, "Active: Manager, Desktop and Cloud can install it"),
     "NodeVersionStatusPending": (True, "Pending: waiting on the Registry's security scan"),
-    "NodeVersionStatusFlagged": (False, "Flagged by the Registry's scan: nothing installs it until a manual review "
-                                        "(an issue on Comfy-Org/registry-backend)"),
+    # Measured 2026-10-03: a Flagged version still installs by id and version (`comfy node registry-install`,
+    # /install?version=, the CDN zip), but the Registry gives the node no latest_version, so ComfyUI-Manager's list
+    # hides it. That is what a manual review on Comfy-Org/registry-backend fixes, and why the row stays red.
+    "NodeVersionStatusFlagged": (False, "Flagged by the Registry's scan: it installs by id and version, but "
+                                        "ComfyUI-Manager's list hides it until a manual review clears it"),
     "NodeVersionStatusBanned": (False, "Banned by the Registry"),
     "NodeVersionStatusDeleted": (False, "Deleted from the Registry: publish a new version"),
 }
@@ -71,7 +76,13 @@ def registry(rep, name, version):
     ahead = _key(newest.get("version", "0")) > _key(version)
     if ahead:
         ok, says = False, says + f"; the Registry's {newest['version']} is ahead of pyproject's {version}"
-    rep.add("registry", f"{name} {version} or older on the Registry, newest Active",
+    try:
+        with urllib.request.urlopen(f"{REGISTRY}/nodes/{name}", timeout=30) as r:
+            latest = (json.loads(r.read() or b"{}").get("latest_version") or {}).get("version")
+    except Exception:                       # the listing is context for the row, never a reason to crash it
+        latest = "unknown"
+    says += f"; the listing's latest_version is {latest}" if latest else "; the listing has no latest_version"
+    rep.add("registry", f"{name} {version} or older on the Registry, newest Active and listed",
             f"{newest.get('version')}: {says}", ok)
 
 
