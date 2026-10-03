@@ -112,7 +112,8 @@ says so before any merge.
 **D10. The policy leaves "draft" when its first adopter passes T4** (this session, 2026-10-03). The file's
 `status` and `POLICY.md`'s first line say draft. Every status change is a version change that every adopter
 re-derives, so it is made once, as 1.0.0, when Qwen 2.1's Verda release check passes with the derived copies, and
-not before: until a run on a buyer's machine has shown the stops, "draft" is the honest word.
+not before, and not while the age-check finding (§8) is open: until a run on a buyer's machine has shown the stops,
+"draft" is the honest word.
 
 **D9. Real-photo edits stay on ✅ Consent; the policy is not changed to hold them** (2026-10-03, on the storefront
 orchestrator's report, relayed by the coordinator, that `eroscraft/CLAUDE.md` rule 3 holds explicit real-photo edits
