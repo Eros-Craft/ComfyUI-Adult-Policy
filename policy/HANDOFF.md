@@ -138,6 +138,7 @@ policy): only the JSON and the reader are derived into packs, so a README edit l
 | `python3 tools/github_settings.py --repo Eros-Craft/ComfyUI-Adult-Policy` on the Mac (labels, rulesets, security settings) | the cloud proxy refuses repository-settings writes | the owner |
 | The Claude GitHub App on this repository | an installation is the owner's | the owner |
 | Whether to hold explicit real-photo edits until "Consent in person" ships (stricter than rule 3; the design names UK s.66I and asks for a lawyer's read before any sale) | rule 3 and `POLICY.md` move only on the owner's own words (D9) | the owner, with a legal review |
+| Policy repository PR #12, Qwen 2.1's pack 1.1.5 export (a Registry publish) | Qwen 2.1's permission check refused it as creating a public surface; nothing was published | the owner |
 | The `COMFY_API_KEY` repository secret, for `comfy-cloud.yml`'s Cloud rows | a secret value is the owner's | the owner |
 
 ## 7. Session roster (this project, 2026-10-03 14:15 UTC)
@@ -151,6 +152,7 @@ policy): only the JSON and the reader are derived into packs, so a README edit l
 | Draft the shared adult policy | policy PRs #6, #7, ErosCraft #45 | done, resolved | none |
 | Wire the policy into Qwen 2.1 | Qwen 2.1 #47, #48, #49 | done, resolved | none |
 | Rename the policy repo (the Mac) | the rename | done, resolved | none |
+| Age check safety margin | the open finding below (§8): whether and how to tighten the age question | working | a measured change or a proposal; until then nobody edits the JSON's or `POLICY.md`'s age question |
 | Weekly policy adoption check (a routine) | reads each workflow's adoption state weekly | review ready | next weekly run |
 
 ## 9. Requests to other projects (sent through the coordinator; nothing edited in their repositories)
@@ -170,6 +172,11 @@ policy): only the JSON and the reader are derived into packs, so a README edit l
   maintainers; nothing here edits the base). Nothing in `policy/` tells a buyer how to launch ComfyUI, so no caution
   belongs here; the testing thread's smoke binds loopback only.
 - **The Registry**: 1.1.3 and 1.1.4 flagged (§4), sent to the Qwen 2.1 orchestrator by the testing thread.
+- **The age check reads apparent age within a wide band** (open, 2026-10-03, owned by the "Age check safety margin"
+  thread). Anima's canary with the shared Qwen3-VL age question, under an "under 30?" proxy, missed 3 of 5 adults
+  aged 20 to 24. The proposal is a "Challenge 25" margin, measured on adults only first (no minors data, ever). That
+  thread decides whether the rules allow the tightening and ships the change or a proposal; `POLICY.md` already
+  calls the age check "asked and failing closed", not measured, for the 8B.
 
 ## Sessions
 
