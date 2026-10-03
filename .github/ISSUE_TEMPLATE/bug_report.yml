@@ -5,7 +5,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Attach nothing explicit, and never an image of a minor or of anyone who could be one. Describe a prompt in words. Something that gets past a gate or a rule is a [private security report](https://github.com/Eros-Craft/ComfyUI-Qwen21-Adult-Policy/security/advisories/new), not an issue.
+        Attach nothing explicit, and never an image of a minor or of anyone who could be one. Describe a prompt in words. Something that gets past a gate or a rule is a [private security report](https://github.com/Eros-Craft/ComfyUI-Adult-Policy/security/advisories/new), not an issue.
   - type: input
     id: version
     attributes:

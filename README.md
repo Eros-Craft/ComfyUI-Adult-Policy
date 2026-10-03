@@ -1,11 +1,14 @@
-# Qwen 2.1 Adult Policy
+# ComfyUI Adult Policy
 
-**18+ only.** This pack is for adult content and is off until both gates are turned on.
+**18+ only.** ErosCraft's adult policy for every ErosCraft workflow, whatever model it runs: two gates, two rules no
+gate overrides, every check fails closed. The policy, the file workflows load and how each one wires it in are in
+[`policy/`](policy/README.md).
 
-ErosCraft's content policy for a Qwen Image 2.1 workflow, and the only place adult text exists in this package.
+## The Qwen 2.1 node pack
 
-This repository is also the home of the [ErosCraft adult policy](policy/README.md) that every ErosCraft workflow
-shares, whatever model it runs. The node pack below is its first adopter.
+This repository also publishes the policy's first adopter, the node pack for the Qwen Image 2.1 workflow (Registry
+name `comfyui-qwen21-adult-policy`). The pack is off until both gates are turned on, and it is the only place adult
+text exists in that workflow.
 
 | Node | What it does |
 |---|---|

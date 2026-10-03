@@ -10,6 +10,6 @@ and arrives in the next exported version, credited to you; the pull request itse
 image of a minor or of anyone who could be one. The gates and the two background rules are not up for removal; a
 change that weakens a check is declined however it is framed.
 
-A bug is an [issue](https://github.com/Eros-Craft/ComfyUI-Qwen21-Adult-Policy/issues/new/choose). A way around a gate or a rule is a
-[private security report](https://github.com/Eros-Craft/ComfyUI-Qwen21-Adult-Policy/security/advisories/new), never an issue
+A bug is an [issue](https://github.com/Eros-Craft/ComfyUI-Adult-Policy/issues/new/choose). A way around a gate or a rule is a
+[private security report](https://github.com/Eros-Craft/ComfyUI-Adult-Policy/security/advisories/new), never an issue
 ([SECURITY.md](SECURITY.md)).
