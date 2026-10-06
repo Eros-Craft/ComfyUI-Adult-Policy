@@ -223,9 +223,14 @@ policy): only the JSON and the reader are derived into packs, so a README edit l
    the same call as `anyone_under_18`, and show `messages.request.famous_person_in_image` on "yes" (an unclear answer
    shows the unclear stop, as for every fact); not at `output`. `policy/README.md` step 4 has the line. State
    2026-10-06: Wan 2.2 and MiniMax H3 ask it; Qwen 2.1 in #54; Anima takes no photo or clip, so it does not apply.
-6. **To Krea 2 Image Creator, the Character Creator and Anima: derive the policy at 0.1.3** (sent once, 2026-10-06,
-   to the Qwen 2.1 coordinator, which relays to Krea 2, and to Anima's): this week's adoption check found no copy of
-   the file in any of the three. Qwen 2.1's 0.1.0 copy is request 1, now its #54.
+6. **To Krea 2 Image Creator, the Character Creator and Anima: derive the policy at 0.1.3**: this week's adoption
+   check found no copy of the file in any of the three. Delivered to Anima's coordinator on 2026-10-06.
+   **Not delivered to Qwen 2.1 or Krea 2**: the Qwen 2.1 coordinator session (which relays to Krea 2) was inactive,
+   and the project coordinator's retry was refused the same way, so this entry is the record for them to pick up
+   when it resumes, with no further retries (the weekly adoption check shows when it lands). What it carries: Qwen
+   2.1 main (`717ba72`) still on 0.1.0, with its #54 (on #51) carrying 0.1.3 and pending review; Krea 2 Image
+   Creator and the Character Creator without the file; and the Registry defect, where a plain install gets pack
+   1.1.3 (Active, the node's `latest_version`) with the fail-open reader, fixed by PR #12 (§4, §6).
 
 ## 8. Known external defects (recorded, not patched here)
 
