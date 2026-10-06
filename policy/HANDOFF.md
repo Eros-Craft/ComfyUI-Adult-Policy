@@ -6,7 +6,7 @@ private workspace) removes every public file outside `.github/`, `policy/` and `
 who was not there. The top four sections are replaced as the state changes; the entries under "Sessions" are
 appended and never rewritten.
 
-## 1. Where the package stands, gate by gate (2026-10-03 14:20 UTC, main at `3bdf059`, after #9 and #11)
+## 1. Where the package stands, gate by gate (2026-10-06 06:30 UTC, main at `f6f8393`, policy 0.1.3 after #19)
 
 What T0 to T4 and "ready to sell" mean for a policy is decided in §5, D1. Short form: the policy owes its own T0,
 T1 and T3 here, and reaches buyers only inside a workflow's zip, so its T2 and T4 are its adopters' render sweep and
@@ -14,23 +14,24 @@ Verda release check.
 
 | Gate | State | Evidence |
 |---|---|---|
-| T0 policy test | green | `python3 policy/test_policy.py`, 14 passed, warnings as errors; on CI in `tests.yml` on Linux, macOS and Windows, Python 3.10, 3.12 and 3.14, and in `checks.yml` (PR #10 merged with 18 of 18 checks green) |
+| T0 policy test | green | `python3 policy/test_policy.py`, 16 passed, warnings as errors; on CI in `tests.yml` on Linux, macOS and Windows, Python 3.10, 3.12 and 3.14, and in `checks.yml` (PR #10 merged with 18 of 18 checks green) |
 | T0 house rules | green | `checks.yml` and `.github/testing/house_rules.py`: no other brand's name, no em dash, no token, no local home path, Registry ruff rules S102, S307, E702 |
 | T1 on CI | green | `comfyui_smoke.py`, 9 of 9 rows on Linux, macOS and Windows with ComfyUI v0.38.2 and with master: the pack from a Registry-shaped zip, all 5 nodes registered, both gates refuse through the real `/prompt` with the exact sentence the policy file holds, a changed sentence caught at its gate position |
 | T1 Desktop | carried by Qwen 2.1's T1 | D7: CI's macOS smoke (green, above) plus Qwen 2.1's T1 Desktop sweep, which runs the derived policy on the Mac's dev install (that sweep is the Qwen 2.1 project's; port 8296 went to it). `desktop-check.sh` stays for a later change to the pack |
 | T2 Cloud check | green, with "Cloud cannot" and "skipped" rows | `comfy-cloud.yml`: the parity smoke at Comfy Cloud's own ComfyUI v0.38.2 passes; Cloud has no node library entry for the pack ("Cloud cannot": Cloud runs only its own library, and is safe for work only); the rows that read Cloud say "skipped" until the `COMFY_API_KEY` secret is set (§6) |
 | T2 render | inherited, not run | a stop through a real run and an image out, on a workflow's Comfy deployment carrying the pack: owed by each adopter (Qwen 2.1's sweep is owed in its own HANDOFF §6) |
-| T3 copies | one re-derive owed | Qwen 2.1 main (`717ba72`, V1.4.0): `adult_policy.py` equal below its two-line GENERATED header (source sha256 prefix `769f0da12e48b925`, this folder's file); its `eroscraft-adult-policy.json` is byte-equal to 0.1.0 (`8a7d6ed`), and both zips (`-verda.zip`, `-verda-customer.zip`) carry those exact bytes. #9 made the file 0.1.1 (MiniMax H3's entry only) D12 0.1.2 (the request's unclear stop reworded) and D13 0.1.3 (a famous face in an input photo asked), so Qwen 2.1 re-derives once (§9, request 1); after that its buyers read the new unclear sentence, every other word stays, and the new fact asks nothing until its engine asks it (request 5). Measured with `cmp` and a zip read |
+| T3 copies | Wan 2.2 and MiniMax H3 current; Qwen 2.1 in review; three workflows carry none | Read 2026-10-06 with `cmp` of the JSON and `diff` of `adult_policy.py` below its generated header: Wan 2.2 (workspace main `02d4b56`, ErosCraft #64) and MiniMax H3 (main `9558386`) are byte-equal to 0.1.3, and both ask `famous_person_in_image` (`FAMOUS_IMAGE` in each `policies.py`). Qwen 2.1 main (`717ba72`, V1.4.0) still carries 0.1.0; its PR #54, stacked on its gate PR #51, carries 0.1.3 byte-equal and asks the new fact, under review. Krea 2 Image Creator, the Character Creator and Anima carry no copy (this week's adoption check, relayed 2026-10-06); Anima takes no photo or clip input (its `policies.py:246`, `input_facts=()`, held by its `suite.py:192`), so request 5 does not reach it, but it still reads its words from its own engine rather than the file. Requests in §9 |
 | T3 export, staged | green, not run | `policy/` plus Qwen 2.1's 1.4.0 `qwen21_adult_policy/` laid side by side: `test_policy.py` 14 passed at 0.1.1; the export's refusal scan and ruff S102, S307, E702 clean over the 1.4.0 pack. ErosCraft #45 and #46 make an export keep `policy/` and rewrite `.github/` to exactly what is here (`checks.yml`, `publish_action.yml`, `dependabot.yml` and all seven community files compared equal this session) |
-| T3 words, every compared pack | green | `test_policy.py` with no skip: Qwen 2.1's pack in this repository, `WAN22_POLICIES` at the Wan 2.2 pack on workspace main `288a888`, `H3_POLICIES` at MiniMax H3's main `de2168c`: 14 passed, every question and stop sentence each pack shows equal to the file resolved for its entry. Krea 2, the Character Creator and Anima are not compared yet (their projects' adoption) |
+| T3 words, every compared pack | green | `test_policy.py` with no skip, 2026-10-06: `WAN22_POLICIES` at the Wan 2.2 pack on workspace main `02d4b56`, `H3_POLICIES` at MiniMax H3's main `9558386`, and the 1.1.4 pack in this repository: 16 passed, every question and stop sentence each pack shows equal to the file resolved for its entry (the 1.1.4 pack's old unclear sentence is allowed by `CHANGED_IN`, D12). Wan 2.2's famous-face stop is tested only with a fake judge in its own suite (its project's note) |
 | T3 version | green for the policy; the pack here is stale | the file and `POLICY.md` both say 0.1.3, and `test_document_names_the_file_version` (#9) holds them together. The exported pack here is 1.1.4; its source is 1.4.0; the export is the Registry publish (§4) |
 | T3 read as a buyer | corrected in this PR | `policy/README.md` had four stale statements (§2); `POLICY.md` read clean |
 | T4 Verda | inherited, not run | the first adopter's release check, Qwen 2.1 V1.4.0 (`docs/verda-release.md` in that repository): not run |
 
-**Live defect first:** published pack 1.1.4 still installs with a fail-open answer reader; the fix, PR #12, waits for
-the owner (§4, §6). **Ready to sell (D1): not yet.** What is left is Qwen 2.1's T1 Desktop sweep, T2 render and T4 (not run),
-and the owner's merges of ErosCraft #45 and #46, plus Qwen 2.1's one re-derive to 0.1.3. Nothing in `policy/` itself is
-red.
+**Live defect first:** the Registry's default install of the pack is 1.1.3, which is Active and the node's
+`latest_version`, and 1.1.4 (Flagged) still installs too; both read a hedged age answer as a pass. The fix, PR #12,
+waits for the owner (§4, §6). **Ready to sell (D1): not yet.** What is left is Qwen 2.1's T1 Desktop sweep, T2 render
+and T4 (not run), its 0.1.3 adoption (#54 after #51), and the owner's merges of ErosCraft #45 and #46. Nothing in
+`policy/` itself is red.
 
 ## 2. What finished overnight (2026-10-02 evening to 2026-10-03 14:15 UTC)
 
@@ -64,9 +65,13 @@ created or used by this project. GitHub Actions on this public repository cost n
 - **The 1.4.0 export of the pack to this repository**: it is the Registry publish (a changed `pyproject.toml` on
   `main` runs `publish_action.yml`), owned by the Qwen 2.1 project, and the owner's instruction stops short of
   publishing. It also must not run before ErosCraft #45 is merged, or it deletes `policy/`.
-- **The other workflows' adoption**: Wan 2.2 compared equal, MiniMax H3 compared equal through its entry (#9),
-  Krea 2, the Character Creator and Anima not compared. Each is its own project's change (`README.md`, "The order").
-- **A live safety defect in a public version (urgent).** The published pack 1.1.4 (and 1.1.3) still installs:
+- **The other workflows' adoption**: Wan 2.2 and MiniMax H3 carry 0.1.3 and ask the famous-face fact; Qwen 2.1's
+  0.1.3 is in review (#54); Krea 2, the Character Creator and Anima carry no copy. Each is its own project's change
+  (`README.md`, "The order"); the finding went to their coordinators once (§9).
+- **A live safety defect in a public version (urgent).** Read again 2026-10-06: the Registry lists 1.1.4 as
+  `NodeVersionStatusFlagged` and 1.1.3 as `NodeVersionStatusActive`, and the node's `latest_version` is 1.1.3, so a
+  plain install gets 1.1.3 (`cdn.comfy.org/.../1.1.3/node.zip` answers 200, 29,086 bytes); 1.1.3's reader is older
+  than 1.1.4's and no stricter. As read on 2026-10-03, the published pack 1.1.4 (and 1.1.3) still installs:
   `api.comfy.org/nodes/comfyui-qwen21-adult-policy/install?version=1.1.4` answers with a `downloadUrl` although the
   version reads `NodeVersionStatusFlagged`, and that `cdn.comfy.org/.../1.1.4/node.zip` answers 200, 29,207 bytes
   (both read this session). Qwen 2.1 measured at 14:20 UTC that it loads in ComfyUI 0.38.2 and that its answer reader
@@ -187,12 +192,12 @@ policy): only the JSON and the reader are derived into packs, so a README edit l
 | Whether to hold explicit real-photo edits until "Consent in person" ships (stricter than rule 3; the design names UK s.66I and asks for a lawyer's read before any sale) | rule 3 and `POLICY.md` move only on the owner's own words (D9) | the owner, with a legal review |
 | The `COMFY_API_KEY` repository secret, for `comfy-cloud.yml`'s Cloud rows | a secret value is the owner's | the owner |
 
-## 7. Session roster (this project, 2026-10-03 14:15 UTC)
+## 7. Session roster (this project, 2026-10-03 14:15 UTC; this row refreshed 2026-10-06)
 
 | Session | Owns | State | Next |
 |---|---|---|---|
 | Coordinator (project chat) | the roster, answers every question, merges | active | relays approvals |
-| Policy package readiness and HANDOFF (this) | `policy/HANDOFF.md`, `policy/README.md` accuracy, the gate definitions, reviews of `policy/` PRs | working | the re-audit, §1 kept current |
+| Policy package readiness and HANDOFF (this) | `policy/HANDOFF.md`, `policy/README.md` accuracy, the gate definitions, reviews of `policy/` PRs | working (owner: "Keep going!", 2026-10-06) | §1 kept current; the adopters' re-derives |
 | Desktop and Cloud testing setup | `.github/testing/`, `tests.yml`, `comfy-cloud.yml`, `.github/actions/` | PRs #10 and #11 merged | the Cloud rows once `COMFY_API_KEY` is set |
 | GitHub best-practice repo setup | the `.github/` community files through ErosCraft #46, `tools/github_settings.py` | waiting on the owner | none until #46 merges |
 | Draft the shared adult policy | policy PRs #6, #7, ErosCraft #45 | done, resolved | none |
@@ -210,14 +215,17 @@ policy): only the JSON and the reader are derived into packs, so a README edit l
    (measured), and fails on any other word.
 2. **To Qwen 2.1: assert the policy's version in its suite.** `policy/README.md` step 5 asks the suite to check
    `SHARED.version` against the version the handbook names; `grep` finds no such assertion in its `suite.py`.
-3. **To MiniMax H3:** its entry is in (#9, 0.1.1); it can derive the two files and switch `policies.py` to reads
-   (`policy/README.md`, "Wiring it into a workflow").
-4. **To Wan 2.2 and MiniMax H3:** Wan 2.2's pack carries its own literal of the old unclear sentence; it moves to the
+3. **To MiniMax H3:** done. Its main (`9558386`) derives the two files at 0.1.3 and reads them.
+4. **To Wan 2.2 and MiniMax H3:** done for Wan 2.2 (ErosCraft #64, 0.1.3). Was: Wan 2.2's pack carries its own literal of the old unclear sentence; it moves to the
    new one when it adopts the file. MiniMax H3's entry rewords its own unclear stops and still says "run it again"
    for a request, which D12 found does not help; its project decides whether to follow (its entry, its words).
 5. **To every adopter that takes photos or clips (Qwen 2.1 first): ask `famous_person_in_image`** (D13) at `inputs`, in
    the same call as `anyone_under_18`, and show `messages.request.famous_person_in_image` on "yes" (an unclear answer
-   shows the unclear stop, as for every fact); not at `output`. `policy/README.md` step 4 has the line.
+   shows the unclear stop, as for every fact); not at `output`. `policy/README.md` step 4 has the line. State
+   2026-10-06: Wan 2.2 and MiniMax H3 ask it; Qwen 2.1 in #54; Anima takes no photo or clip, so it does not apply.
+6. **To Krea 2 Image Creator, the Character Creator and Anima: derive the policy at 0.1.3** (sent once, 2026-10-06,
+   to the Qwen 2.1 coordinator, which relays to Krea 2, and to Anima's): this week's adoption check found no copy of
+   the file in any of the three. Qwen 2.1's 0.1.0 copy is request 1, now its #54.
 
 ## 8. Known external defects (recorded, not patched here)
 
@@ -225,7 +233,7 @@ policy): only the JSON and the reader are derived into packs, so a README edit l
   web origin call the local ComfyUI API (found by the storefront orchestrator; the request is with the base's
   maintainers; nothing here edits the base). Nothing in `policy/` tells a buyer how to launch ComfyUI, so no caution
   belongs here; the testing thread's smoke binds loopback only.
-- **The Registry**: 1.1.3 and 1.1.4 are flagged and still install, with the fail-open reader (§4).
+- **The Registry**: 1.1.4 is flagged and still installs; 1.1.3 is Active and the default install; both have the fail-open reader (§4).
 - **The workspace's `base/desktop.sh --stand-ins` truncates real model files** (found by the storefront orchestrator,
   whose project owns the fix): lines 112 to 118 open every path its stand-in manifest lists with `"wb"`, so a real
   file installed later at a listed path is zeroed (the Character Creator's 8.9 GB Qwen3-VL encoder was). This
@@ -259,3 +267,13 @@ from ErosCraft #46 imported and its `CHECKS`, `PUBLISH_ACTION`, `DEPENDABOT` and
 `policy/` (`house_rules.py`, 35 files). Added: the three-pack word comparison (§1, "T3 words"), D10. Nothing in
 the JSON or the reader changed, so the file stays 0.1.1. **How.** `H3_POLICIES=... WAN22_POLICIES=... python3
 policy/test_policy.py` from the three checkouts above. **Owed.** §4 and §9; none of it is in `policy/`.
+
+### 3. 0.1.2 and 0.1.3, then the adoption state (2026-10-03 to 2026-10-06, no machine)
+
+**Proven.** #17 (0.1.2, D12), #18 (the age margin's four owner decisions), #19 (0.1.3, D13), each merged with 16 of
+16 checks green. On 2026-10-06: Wan 2.2 and MiniMax H3 byte-equal to 0.1.3 and passing the word comparison, Qwen 2.1's
+#54 byte-equal, and the Registry's default install being 1.1.3 (§1, §4). ErosCraft #45 and #46 are still open, with
+no check runs, and `publish_pack.py` is unchanged on workspace main since their base `fb388ce`, so they still apply
+as reviewed. **How.** `git archive` of each adopter's main into a scratch folder, `cmp` and `diff`, then
+`WAN22_POLICIES=... H3_POLICIES=... python3 policy/test_policy.py`; the Registry's own API
+(`api.comfy.org/nodes/comfyui-qwen21-adult-policy/versions`) and a GET of the CDN zip. **Owed.** §4, §6.
