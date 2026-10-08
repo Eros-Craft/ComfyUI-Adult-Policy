@@ -31,7 +31,8 @@ Version 0.1.2 rewords the request's "unclear" stop (rerunning gets the same answ
 A pack that copied its words before then shows the old sentence until it re-derives; `CHANGED_IN` in `test_policy.py`
 lists each version's changed words, and every other word must still be equal. Version 0.1.3 adds
 `famous_person_in_image`, asked of every photo or clip the person adds in the same call as `anyone_under_18`; it stops
-nothing until a pack's engine asks it, and it is unmeasured. "Not yet" means that workflow's pack has not been compared with the file, so its checkpoints above are a first
+nothing until a pack's engine asks it, and it is unmeasured. Version 0.1.4 adds `fail_closed.reask_unclear`: a fact
+answered unclearly is asked once more in a fresh call, and only a clean "no" then passes; no word changes. "Not yet" means that workflow's pack has not been compared with the file, so its checkpoints above are a first
 guess its session confirms when it adopts. A new workflow adds its own row to `workflows` in the same change that
 wires it in.
 

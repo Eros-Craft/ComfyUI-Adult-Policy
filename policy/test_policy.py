@@ -169,6 +169,9 @@ def test_weakened_copies_are_refused():
     _refused(lambda d: d["facts"][0].update(unsafe=False))                          # a fact inverted
     _refused(lambda d: d["fail_closed"].update(required=False))                     # fail open
     _refused(lambda d: d["fail_closed"]["answer_words"]["safe"].append("unsure"))   # a maybe read as safe
+    _refused(lambda d: d["fail_closed"].update(reask_unclear=2))                    # unclear asked until it says no
+    _refused(lambda d: d["fail_closed"].update(reask_unclear=True))                 # not a count
+    _refused(lambda d: d["fail_closed"].update(reask_unclear="1"))                  # not a count
     _refused(lambda d: d["messages"]["output"].pop("anyone_under_18"))              # a stop with no sentence
     _refused(lambda d: d["rules"][1]["checked_at"].remove("inputs"))                # photos no longer checked for fame
     _refused(lambda d: d["rules"][1]["facts"].remove("famous_person_in_image"))     # checked on photos, asking nothing
@@ -236,6 +239,22 @@ def test_unclear_request_says_reword_not_rerun():
         assert "a finding about your request" in m["request"]          # never tells them they asked for a minor
         assert "run it again" in m["output"]
     assert all(_ver(v) <= _ver(RAW["version"]) for v in CHANGED_IN), "CHANGED_IN names a version the file is not at yet"
+
+
+def test_an_unclear_answer_is_asked_once_more():
+    """0.1.4: a fact the checker answered unclearly is asked once more, in a fresh call, the same question; only a
+    clean "no" on that second reply passes, and a second unclear or a "yes" stops (the user's decision of 2026-10-08,
+    on Wan 2.2's measurement that its judge can answer one photo unclearly and then clearly). Each pack's engine does
+    the asking; the file says how many times, and never more than once."""
+    assert RAW["fail_closed"]["reask_unclear"] == 1
+    for media in ap.MEDIA:
+        assert ap.load(media=media).reask_unclear == 1
+    older = copy.deepcopy(RAW)
+    del older["fail_closed"]["reask_unclear"]
+    assert ap.AdultPolicy(ap.validate(older), "image").reask_unclear == 0, "a file without the key asks once"
+    stricter = copy.deepcopy(RAW)
+    stricter["fail_closed"]["reask_unclear"] = 0
+    ap.validate(stricter)
 
 
 def test_a_famous_face_in_a_photo_is_asked():
