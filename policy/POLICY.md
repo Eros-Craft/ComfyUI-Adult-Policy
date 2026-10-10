@@ -60,8 +60,9 @@ including the 16 to 17 band, with one false stop on an 18-year-old. It is **not*
 frames, or on the Qwen3-VL 8B that Qwen 2.1 asks through. Until it is, read those checks as "asked and failing
 closed", not "measured". `famous_person_in_image` (0.1.3) is never measured on famous people, because that needs
 photos of real famous people, which no ErosCraft test makes or uses. On ordinary adults (2026-10-10, Qwen3-VL 4B on
-an RTX PRO 6000, raw answers read) it falsely stopped 1 of 2 distinct photos. Known limit: a polished studio portrait
-of an ordinary person can be stopped as famous. No test anywhere
+an RTX PRO 6000, raw answers read) it falsely stopped 1 of 2 distinct photos. It also stopped one cast picture a
+workflow generated itself. Known limit: a polished portrait of an ordinary person, uploaded or generated, can be
+stopped as famous. No test anywhere
 uses an image of a minor; the minors checks are measured only for false stops on adults.
 
 ## The Civitai picker
