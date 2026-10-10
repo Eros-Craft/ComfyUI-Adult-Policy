@@ -58,9 +58,10 @@ prompt in the file. Each fact is a yes/no question where "yes" is unsafe:
 negatives and 0 false positives over a 12-prompt set, and the age question caught 6 of 6 minors on generated stills,
 including the 16 to 17 band, with one false stop on an 18-year-old. It is **not** measured on real photos, on video
 frames, or on the Qwen3-VL 8B that Qwen 2.1 asks through. Until it is, read those checks as "asked and failing
-closed", not "measured". `famous_person_in_image` (0.1.3) is unmeasured and stays so: measuring it needs photos of
-real famous people, which no ErosCraft test makes or uses. No test anywhere uses an image of a minor; the minors checks
-are measured only for false stops on adults.
+closed", not "measured". `famous_person_in_image` (0.1.3) is never measured on famous people, because that needs
+photos of real famous people, which no ErosCraft test makes or uses. Its first reading on ordinary adults
+(2026-10-10, one workflow's call on an RTX PRO 6000) stopped 4 of 4, with the raw answers not yet captured. No test anywhere
+uses an image of a minor; the minors checks are measured only for false stops on adults.
 
 ## The Civitai picker
 
