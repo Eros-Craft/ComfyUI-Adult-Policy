@@ -214,6 +214,14 @@ that can only add stops. `POLICY.md` and the README now name the limit: a polish
 person can be stopped as famous. The file's `measured` string takes this figure in the next version bump, whichever
 version PR #22 lands (D16).
 
+A third reading came about 23:10Z on the same build. In case c3-480p-person-a, the gate, the clip check and both
+partner-photo checks were clear. The post-staging check then asked about the cast picture the pipeline had generated
+itself, and the judge answered "anyone_under_18: no / famous_person_in_image: yes", which stopped the run. Wan records
+it as an expected stop under D17 (its logs: `eroscraft-video-creator-wan-2.2/t2-phase2-2026-10-10/chat-cast/` in the
+workspace). So the overcall also lands on generated pictures, not only on uploaded studio headshots, wherever a pack
+feeds a generated picture back in as an input. The decision is unchanged, and the limit line in `POLICY.md` and the
+README now covers polished portraits of ordinary people, uploaded or generated.
+
 **D9. Real-photo edits stay on ✅ Consent; the policy is not changed to hold them** (2026-10-03, on the storefront
 orchestrator's report, relayed by the coordinator, that `eroscraft/CLAUDE.md` rule 3 holds explicit real-photo edits
 until "Consent in person" ships). Rule 3 says the opposite: "An explicit edit of a real photo runs on ✅ Consent
