@@ -198,6 +198,22 @@ are in, 0 of 4 measures one pack's call rather than the question. And a version 
 adopter re-derive, and it would collide with PR #22's 0.1.4. `test_a_famous_face_in_a_photo_is_asked` still holds
 the fact.
 
+**D17. The famous-face question is not reworded; its false stop is the judge's** (the coordinator's decision,
+2026-10-10, under the owner-away mandate, on Wan 2.2's rerun with raw answers). On Wan 2.2's PR #12 at `d664e02`, on
+an RTX PRO 6000 at about 23:00Z, the judge (Qwen3-VL 4B) answered "anyone_under_18: no / famous_person_in_image: yes"
+for an ordinary woman's studio headshot (head and shoulders, plain grey background) in all four checks. A walking
+photo of an ordinary adult in a coat answered no and no at the gate, at the 8-frame clip check and at the output
+check, and it rendered (its logs: `eroscraft-video-creator-wan-2.2/t2-phase2-2026-10-10/chat-rerun/` in the
+workspace). So the judge said a confident yes, not a hedge, and neither the parser nor the 0.1.2 unclear wording is
+the cause. The measured figure is now 1 of 2 distinct ordinary-adult photos falsely stopped. It replaces D16's 4 of 4,
+which had no raw answers, and the gym and jeans photos were not rerun. `facts/3` is not reworded, and
+`famous_person_in_image` stays fail-closed. Rewording would widen what passes on a rule meant to block real public
+figures' likenesses, and two photos are not enough evidence for that. Pack owners record these as known false stops.
+Any reduction comes from the judge side, as the pack owner's decision: a stronger or newer model, or a second opinion
+that can only add stops. `POLICY.md` and the README now name the limit: a polished studio portrait of an ordinary
+person can be stopped as famous. The file's `measured` string takes this figure in the next version bump, whichever
+version PR #22 lands (D16).
+
 **D9. Real-photo edits stay on ✅ Consent; the policy is not changed to hold them** (2026-10-03, on the storefront
 orchestrator's report, relayed by the coordinator, that `eroscraft/CLAUDE.md` rule 3 holds explicit real-photo edits
 until "Consent in person" ships). Rule 3 says the opposite: "An explicit edit of a real photo runs on ✅ Consent

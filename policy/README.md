@@ -31,8 +31,9 @@ Version 0.1.2 rewords the request's "unclear" stop (rerunning gets the same answ
 A pack that copied its words before then shows the old sentence until it re-derives; `CHANGED_IN` in `test_policy.py`
 lists each version's changed words, and every other word must still be equal. Version 0.1.3 adds
 `famous_person_in_image`, asked of every photo or clip the person adds in the same call as `anyone_under_18`; it stops
-nothing until a pack's engine asks it. It is never measured on famous people, and its first reading stopped 4 of 4
-ordinary adults (2026-10-10, `HANDOFF.md` D16). "Not yet" means that workflow's pack has not been compared with the file, so its checkpoints above are a first
+nothing until a pack's engine asks it. It is never measured on famous people, and on ordinary adults it falsely
+stopped 1 of 2 distinct photos (2026-10-10, `HANDOFF.md` D17). Known limit: a polished studio portrait of an ordinary
+person can be stopped as famous. "Not yet" means that workflow's pack has not been compared with the file, so its checkpoints above are a first
 guess its session confirms when it adopts. A new workflow adds its own row to `workflows` in the same change that
 wires it in.
 
