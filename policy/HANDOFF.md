@@ -164,6 +164,20 @@ consented real-photo edit (D9). Rule 2's own words, "No famous real person named
 the rule's description in `POLICY.md` now names photos. It stops nothing in a pack until that pack's engine asks it
 (§9, request 5). `test_a_famous_face_in_a_photo_is_asked` holds it.
 
+**D14. Frame readers log the judge's raw answer beside the parsed verdict** (the coordinator's decision, 2026-10-10,
+under the owner-away mandate). Wan 2.2's render thread reported, through the weekly adoption check because Qwen 2.1's
+orchestrator was offline, that the under-18 check on output frames stopped a video of a fictional 18-year-old man, on
+an H100 and earlier on an RTX PRO 6000 (its logs: `eroscraft-video-creator-wan-2.2/t2-phase2-2026-10-10/h100/logs/`
+in the workspace). The logs held the verdict but not what the judge said, so the stop could not be told apart from a
+parse failure. The recommendation to every pack owner, Wan 2.2 first: log the judge's answer text next to the parsed
+verdict, as text only and never image data. It changes no outcome and nothing in the policy file; it makes a false
+stop diagnosable.
+
+**D15. No special handling for 18 and 19 year olds on frames** (the coordinator's decision, 2026-10-10, on the same
+report). The age check stays fail-closed, and a young-looking adult being stopped is the cost `POLICY.md` already
+accepts ("asked and failing closed", not measured). Any change to the margin belongs to the age margin's pending
+approval in §6 (D11), not to a carve-out for an age band.
+
 **D9. Real-photo edits stay on ✅ Consent; the policy is not changed to hold them** (2026-10-03, on the storefront
 orchestrator's report, relayed by the coordinator, that `eroscraft/CLAUDE.md` rule 3 holds explicit real-photo edits
 until "Consent in person" ships). Rule 3 says the opposite: "An explicit edit of a real photo runs on ✅ Consent
