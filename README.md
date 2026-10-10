@@ -44,7 +44,7 @@ chose for the picture.
 
 It lists Qwen Image 2.1 LoRAs from Civitai Red and never offers a resource flagged as a real person's likeness, a
 minor, or SFW-only, nor one whose name or tags suggest a minor, a likeness or non-consent. It checks again on the
-server before any download. Downloads need `CIVITAI_TOKEN` on the machine, and never reach the page.
+server before any download. Downloads need a Civitai key on the machine (`CivitAI_API_KEY`, or `CIVITAI_TOKEN` in the base's `tokens.env`), and never reach the page.
 
 Examples: https://civitai.red/user/Generate-AI-1
 

@@ -457,8 +457,8 @@ def civitai_fetch(version_id, host="https://civitai.red"):
         raise ValueError("that version has no .safetensors file")
     tok = cv.civitai_token()
     if not tok:
-        raise ValueError("no CIVITAI_TOKEN on the server: Civitai requires one to download. Set it and restart "
-                         "ComfyUI.")
+        raise ValueError("no Civitai key on the server (CivitAI_API_KEY, or CIVITAI_TOKEN in the base's tokens.env): "
+                         "Civitai requires one to download. Set it and restart ComfyUI.")
     url = cv.civitai_safe_url(primary.get("downloadUrl") or "%s/api/download/models/%d" % (host.rstrip("/"), vid))
     root = folder_paths.get_folder_paths("loras")[0]
     out_dir = os.path.join(root, *cv.CIVITAI_DIR.split("/"))

@@ -73,7 +73,7 @@ or a "CI cannot"/"Cloud cannot" row with its reason.
 
 ## Settings, once (names only; a value never goes in a file)
 
-1. **Secret** `COMFY_API_KEY` (Settings, Secrets and variables, Actions, New repository secret): the key from
+1. **Secret** `ComfyPlatform_API_KEY` (Settings, Secrets and variables, Actions, New repository secret): the key from
    platform.comfy.org, for `comfy-cloud.yml`'s read-only Cloud rows. Until it is set those rows say "skipped: no
    Comfy API key" and pass, and the parity run tests the newest ComfyUI release instead of Cloud's.
 2. **No required check on `main`.** The pack export (`publish_pack.py`) pushes each release straight to `main`, so a

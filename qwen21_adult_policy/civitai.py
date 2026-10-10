@@ -149,7 +149,7 @@ def civitai_token():
     base keeps it in state/tokens.env, so reading only the environment would look like "no token"
     on a pod that has one.
     """
-    tok = os.environ.get("CIVITAI_TOKEN") or os.environ.get("CIVITAI_API_KEY")
+    tok = os.environ.get("CivitAI_API_KEY") or os.environ.get("CIVITAI_TOKEN")
     if tok:
         return tok.strip()
     for path in (os.environ.get("BASE_STATE", "") and
