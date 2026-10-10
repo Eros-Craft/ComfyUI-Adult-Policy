@@ -25,6 +25,6 @@ jobs:
       - name: Publish Custom Node
         uses: Comfy-Org/publish-node-action@d2366e7abb6ab16f3bb03e3520ae25c8cf749bc9  # main, 2025-05-09
         with:
-          personal_access_token: ${{ secrets.REGISTRY_ACCESS_TOKEN }}
+          personal_access_token: ${{ secrets.ComfyRegistry_API_Key }}
           # the action's own checkout is an unpinned actions/checkout@v4; the pinned one above already did the job
           skip_checkout: "true"

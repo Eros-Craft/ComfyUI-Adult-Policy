@@ -16,7 +16,7 @@ Rows, in the ErosCraft test-report format (the same one comfyui_smoke.py writes)
                      That row is "Cloud cannot" with its reason, never a failure; renders of the policy happen in each
                      workflow repository's comfy-cloud.yml (a deployment carrying the pack) and on Verda.
 
-The Cloud rows need comfy-cli on PATH and the Comfy API key in COMFY_CLOUD_API_KEY or COMFY_API_KEY; without them
+The Cloud rows need comfy-cli on PATH and the Comfy API key in ComfyPlatform_API_KEY (or comfy-cli's COMFY_CLOUD_API_KEY); without them
 they are "skipped" with the reason. Nothing here queues a job or spends a credit. With --github-output the Cloud
 ComfyUI version is written to $GITHUB_OUTPUT as `comfyui=<tag>` for the parity job.
 """
@@ -37,8 +37,8 @@ from comfyui_smoke import Report, pack_facts, pack_version  # noqa: E402
 
 REGISTRY = "https://api.comfy.org"
 ENV = dict(os.environ, DO_NOT_TRACK="1", COMFY_NO_TELEMETRY="1", COMFY_NO_WATCH="1")
-if not ENV.get("COMFY_CLOUD_API_KEY") and ENV.get("COMFY_API_KEY"):
-    ENV["COMFY_CLOUD_API_KEY"] = ENV["COMFY_API_KEY"]
+if not ENV.get("COMFY_CLOUD_API_KEY") and ENV.get("ComfyPlatform_API_KEY"):
+    ENV["COMFY_CLOUD_API_KEY"] = ENV["ComfyPlatform_API_KEY"]
 VERDICT = {
     "NodeVersionStatusActive": (True, "Active: Manager, Desktop and Cloud can install it"),
     "NodeVersionStatusPending": (True, "Pending: waiting on the Registry's security scan"),
@@ -101,7 +101,7 @@ def cloud(rep, classes):
     if not shutil.which("comfy"):
         why = "comfy-cli is not on PATH (uv tool install comfy-cli)"
     elif not ENV.get("COMFY_CLOUD_API_KEY"):
-        why = "no Comfy API key: set the COMFY_API_KEY secret (Settings, Secrets and variables, Actions)"
+        why = "no Comfy API key: set the ComfyPlatform_API_KEY secret (Settings, Secrets and variables, Actions)"
     if why:
         rep.skip("cloud-comfyui", "Comfy Cloud's ComfyUI version", why)
         rep.skip("cloud-nodes", "the pack's classes on Cloud", why)

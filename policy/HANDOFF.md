@@ -18,7 +18,7 @@ Verda release check.
 | T0 house rules | green | `checks.yml` and `.github/testing/house_rules.py`: no other brand's name, no em dash, no token, no local home path, Registry ruff rules S102, S307, E702 |
 | T1 on CI | green | `comfyui_smoke.py`, 9 of 9 rows on Linux, macOS and Windows with ComfyUI v0.38.2 and with master: the pack from a Registry-shaped zip, all 5 nodes registered, both gates refuse through the real `/prompt` with the exact sentence the policy file holds, a changed sentence caught at its gate position |
 | T1 Desktop | carried by Qwen 2.1's T1 | D7: CI's macOS smoke (green, above) plus Qwen 2.1's T1 Desktop sweep, which runs the derived policy on the Mac's dev install (that sweep is the Qwen 2.1 project's; port 8296 went to it). `desktop-check.sh` stays for a later change to the pack |
-| T2 Cloud check | green, with "Cloud cannot" and "skipped" rows | `comfy-cloud.yml`: the parity smoke at Comfy Cloud's own ComfyUI v0.38.2 passes; Cloud has no node library entry for the pack ("Cloud cannot": Cloud runs only its own library, and is safe for work only); the rows that read Cloud say "skipped" until the `COMFY_API_KEY` secret is set (§6) |
+| T2 Cloud check | green, with "Cloud cannot" and "skipped" rows | `comfy-cloud.yml`: the parity smoke at Comfy Cloud's own ComfyUI v0.38.2 passes; Cloud has no node library entry for the pack ("Cloud cannot": Cloud runs only its own library, and is safe for work only); the rows that read Cloud say "skipped" until the `ComfyPlatform_API_KEY` secret is set (§6) |
 | T2 render | inherited, not run | a stop through a real run and an image out, on a workflow's Comfy deployment carrying the pack: owed by each adopter (Qwen 2.1's sweep is owed in its own HANDOFF §6) |
 | T3 copies | Wan 2.2 and MiniMax H3 current; Qwen 2.1 in review; three workflows carry none | Read 2026-10-06 with `cmp` of the JSON and `diff` of `adult_policy.py` below its generated header: Wan 2.2 (workspace main `02d4b56`, ErosCraft #64) and MiniMax H3 (main `9558386`) are byte-equal to 0.1.3, and both ask `famous_person_in_image` (`FAMOUS_IMAGE` in each `policies.py`). Qwen 2.1 main (`717ba72`, V1.4.0) still carries 0.1.0; its PR #54, stacked on its gate PR #51, carries 0.1.3 byte-equal and asks the new fact, under review. Krea 2 Image Creator, the Character Creator and Anima carry no copy (this week's adoption check, relayed 2026-10-06); Anima takes no photo or clip input (its `policies.py:246`, `input_facts=()`, held by its `suite.py:192`), so request 5 does not reach it, but it still reads its words from its own engine rather than the file. Requests in §9 |
 | T3 export, staged | green, not run | `policy/` plus Qwen 2.1's 1.4.0 `qwen21_adult_policy/` laid side by side: `test_policy.py` 14 passed at 0.1.1; the export's refusal scan and ruff S102, S307, E702 clean over the 1.4.0 pack. ErosCraft #45 and #46 make an export keep `policy/` and rewrite `.github/` to exactly what is here (`checks.yml`, `publish_action.yml`, `dependabot.yml` and all seven community files compared equal this session) |
@@ -204,7 +204,7 @@ policy): only the JSON and the reader are derived into packs, so a README edit l
 | `python3 tools/github_settings.py --repo Eros-Craft/ComfyUI-Adult-Policy` on the Mac (labels, rulesets, security settings) | the cloud proxy refuses repository-settings writes | the owner |
 | The Claude GitHub App on this repository | an installation is the owner's | the owner |
 | Whether to hold explicit real-photo edits until "Consent in person" ships (stricter than rule 3; the design names UK s.66I and asks for a lawyer's read before any sale) | rule 3 and `POLICY.md` move only on the owner's own words (D9) | the owner, with a legal review |
-| The `COMFY_API_KEY` repository secret, for `comfy-cloud.yml`'s Cloud rows | a secret value is the owner's | the owner |
+| The `ComfyPlatform_API_KEY` repository secret, for `comfy-cloud.yml`'s Cloud rows | a secret value is the owner's | the owner |
 
 ## 7. Session roster (this project, 2026-10-03 14:15 UTC; this row refreshed 2026-10-06)
 
@@ -212,7 +212,7 @@ policy): only the JSON and the reader are derived into packs, so a README edit l
 |---|---|---|---|
 | Coordinator (project chat) | the roster, answers every question, merges | active | relays approvals |
 | Policy package readiness and HANDOFF (this) | `policy/HANDOFF.md`, `policy/README.md` accuracy, the gate definitions, reviews of `policy/` PRs | working (owner: "Keep going!", 2026-10-06) | §1 kept current; the adopters' re-derives |
-| Desktop and Cloud testing setup | `.github/testing/`, `tests.yml`, `comfy-cloud.yml`, `.github/actions/` | PRs #10 and #11 merged | the Cloud rows once `COMFY_API_KEY` is set |
+| Desktop and Cloud testing setup | `.github/testing/`, `tests.yml`, `comfy-cloud.yml`, `.github/actions/` | PRs #10 and #11 merged | the Cloud rows once `ComfyPlatform_API_KEY` is set |
 | GitHub best-practice repo setup | the `.github/` community files through ErosCraft #46, `tools/github_settings.py` | waiting on the owner | none until #46 merges |
 | Draft the shared adult policy | policy PRs #6, #7, ErosCraft #45 | done, resolved | none |
 | Wire the policy into Qwen 2.1 | Qwen 2.1 #47, #48, #49 | done, resolved | none |

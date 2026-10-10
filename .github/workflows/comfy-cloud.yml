@@ -10,7 +10,7 @@
 # comfy-cloud.yml, on a deployment that carries the pack, and to the Verda release check: Comfy Cloud runs only its
 # own node library, and is safe-for-work only. .github/testing/TESTING.md has the whole ladder.
 #
-# Settings, once (names only; a value never goes in a file): the repository secret COMFY_API_KEY (the key from
+# Settings, once (names only; a value never goes in a file): the repository secret ComfyPlatform_API_KEY (the key from
 # platform.comfy.org). Without it the Cloud rows say "skipped" and the parity run tests the newest release instead.
 name: comfy-cloud
 
@@ -52,7 +52,7 @@ jobs:
       - name: the Registry and Comfy Cloud, read only
         id: check
         env:
-          COMFY_API_KEY: ${{ secrets.COMFY_API_KEY }}
+          ComfyPlatform_API_KEY: ${{ secrets.ComfyPlatform_API_KEY }}
           EVENT: ${{ github.event_name }}
         run: |
           mkdir -p "$RUNNER_TEMP/cloud"
