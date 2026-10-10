@@ -1,6 +1,6 @@
 # ErosCraft adult policy
 
-Version 0.1.3, draft. The machine-readable copy is [`eroscraft-adult-policy.json`](eroscraft-adult-policy.json); where
+Version 0.1.4, draft. The machine-readable copy is [`eroscraft-adult-policy.json`](eroscraft-adult-policy.json); where
 this page and the file differ, the file is what runs and this page is wrong.
 
 **18+ only.** Every ErosCraft workflow makes erotic and fantasy pictures and videos for adults, made by the person
@@ -39,6 +39,9 @@ as the unsafe answer:
 - a thinking block opened and never closed;
 - a fact's label is missing from the reply;
 - a label's first whole word is neither yes nor no ("not sure" and "none" are not a no).
+
+A fact answered unclearly is asked once more, in a fresh call with the same question (0.1.4). Only a plain "no" on
+that second reply passes; a second unclear answer, or a "yes", stops the run. It is asked again once at most.
 
 A stop with no clear answer behind it says so, and never tells the person they asked for a minor.
 

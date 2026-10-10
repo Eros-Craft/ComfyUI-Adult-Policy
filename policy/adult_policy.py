@@ -80,6 +80,11 @@ def validate(data):
     words = (data.get("fail_closed") or {}).get("answer_words") or {}
     if words.get("safe") != ["no"]:
         raise PolicyError("only a plain 'no' may read as safe")
+    # 0.1.4: an unclear answer may be asked once more, in a fresh call, and only a clean "no" then passes. Once at
+    # most: every further ask is one more chance for a wrong "no", so a file asking more is a weakened one.
+    reask = (data.get("fail_closed") or {}).get("reask_unclear", 0)
+    if type(reask) is not int or reask not in (0, 1):
+        raise PolicyError("fail_closed.reask_unclear is 0 or 1: an unclear answer is asked again at most once")
 
     messages = data.get("messages") or {}
     for section in ("request", "rewrite"):
@@ -161,6 +166,7 @@ class AdultPolicy:
         self.gates = tuple(g["key"] for g in data["gates"])
         self.facts = {f["key"]: f for f in data["facts"]}
         self.system = data["checker"]["system"]
+        self.reask_unclear = data["fail_closed"].get("reask_unclear", 0)
         self.messages = _resolve(_merge(data["messages"], entry.get("messages") or {}), media)
         civitai = data["civitai"]
         self.refused_flags = dict(civitai.get("refused_flags") or {})
