@@ -178,6 +178,26 @@ report). The age check stays fail-closed, and a young-looking adult being stoppe
 accepts ("asked and failing closed", not measured). Any change to the margin belongs to the age margin's pending
 approval in §6 (D11), not to a carve-out for an age band.
 
+**D16. The famous-face check on photos stays fail-closed after stopping 4 of 4 ordinary adults** (the coordinator's
+decision, 2026-10-10, under the owner-away mandate). On Wan 2.2's PR #11 (V0.3.0), on an RTX PRO 6000 Comfy
+deployment, `famous_person_in_image` stopped all four project-generated ordinary adults it was shown: a headshot, a gym
+photo, a jeans photo and a walk clip. The same walk start photo passed in phase 2 on V0.1.1 (its logs:
+`eroscraft-video-creator-wan-2.2/t2-phase2-2026-10-10/chat-run/` in the workspace). The judge's raw answers were not
+captured, because the gate's print never reaches a deployment's job logs. Nothing is loosened. This is the fact's
+first reading: 0 of 4 ordinary adults passed, on that pack's call. Wan's `flush=True` fix is endorsed as D14 on
+deployments, and the next step is a rerun that captures the raw answers. The weekly adoption check read the policy
+side against main `79f1b1a`. The question already says "An ordinary person who is not famous is NOT". Each stop
+showed the fact's own sentence, not `messages.unclear.request`, so the engine parsed a first word of "yes": the 0.1.2
+unclear wording does not explain these stops unless Wan's engine sends unclear answers to that sentence. The other
+lead is that 0.1.3 asks this fact in the same call as `anyone_under_18`, and the passing and failing runs came from
+different packages, so V0.3.0's chat maker may build that call differently. Both leads are Wan's code. If the raw
+answers show a hedge read as a stop, the remedy is a policy wording PR with tests, owned by the weekly adoption check
+thread; until then there is no wording change. The reading is written in `POLICY.md` and the README now. The file's
+own `measured` string waits for the rerun and rides the next version bump, for two reasons. Until the raw answers
+are in, 0 of 4 measures one pack's call rather than the question. And a version bump for one string would make every
+adopter re-derive, and it would collide with PR #22's 0.1.4. `test_a_famous_face_in_a_photo_is_asked` still holds
+the fact.
+
 **D9. Real-photo edits stay on ✅ Consent; the policy is not changed to hold them** (2026-10-03, on the storefront
 orchestrator's report, relayed by the coordinator, that `eroscraft/CLAUDE.md` rule 3 holds explicit real-photo edits
 until "Consent in person" ships). Rule 3 says the opposite: "An explicit edit of a real photo runs on ✅ Consent
