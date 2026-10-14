@@ -93,7 +93,7 @@ Where a workflow's adult pack is generated in part by its `_build/derive.py` (Qw
 
    A missing or weakened file raises at import, so the pack does not load and nothing samples: fail closed.
 5. **Test it.** The suite asserts the pack's constants equal the file's (`_matches` in `test_policy.py` is the check
-   to copy) and that `SHARED.version` is the one the handbook names.
+   to copy) and that `SHARED.version` is the version the handbook or the pack's README names.
 6. **Release.** The workflow's patch version in its seven places, the zip, then the pack's export.
 
 ## The order

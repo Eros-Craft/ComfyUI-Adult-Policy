@@ -256,6 +256,14 @@ fact's `measured` text ended "(HANDOFF D17)": the file's words ship inside every
 shipped-text rule refuses a pointer into this repository's records. 0.1.5 drops the pointer and changes nothing else.
 `test_the_file_points_at_no_records` holds it.
 
+**D21. An adopter's version check may read the pack's README** (2026-10-14, on Wan Animate 2's request through the
+Weekly adoption check thread). Wan Animate 2 no longer names the policy version in its buyer-facing handbook, so its
+`test_static_every_word_is_the_shared_policys` now reads the version from the adult pack's README, which ships and
+states it. Accepted: README step 5 now asks that `SHARED.version` match "the version the handbook or the pack's
+README names". Grounds: the README is a shipped, declared version just as the handbook is, and the test still compares
+the copied JSON against it, so no check is loosened. Wan 2.2 and MiniMax H3, which use the handbook, stay correct.
+(The coordinator's relay called this D19; D19 was already the likeness fact, so it is D21 here.)
+
 **D9. Real-photo edits stay on ✅ Consent; the policy is not changed to hold them** (2026-10-03, on the storefront
 orchestrator's report, relayed by the coordinator, that `eroscraft/CLAUDE.md` rule 3 holds explicit real-photo edits
 until "Consent in person" ships). Rule 3 says the opposite: "An explicit edit of a real photo runs on ✅ Consent
