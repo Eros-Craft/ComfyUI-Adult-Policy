@@ -41,6 +41,7 @@ def _pack_policies(path, name):
 # names are left out for it, and only those: every other word must still be equal.
 CHANGED_IN = {
     "0.1.2": {"unclear"},       # the request's unclear stop: rerunning gets the same answer, so reword instead
+    "0.1.6": {"unclear", "output unclear"},   # a buyer has no console: the unclear stops point at ComfyUI's log
 }
 
 
@@ -239,6 +240,8 @@ def test_unclear_request_says_reword_not_rerun():
         assert "run it again" not in m["request"] and "Reword it" in m["request"]
         assert "a finding about your request" in m["request"]          # never tells them they asked for a minor
         assert "run it again" in m["output"]
+        for text in (m["request"], m["output"]):                     # a buyer has no console (0.1.6)
+            assert "console" not in text and text.endswith("If it stops again, ComfyUI's log says why.")
     assert all(_ver(v) <= _ver(RAW["version"]) for v in CHANGED_IN), "CHANGED_IN names a version the file is not at yet"
 
 

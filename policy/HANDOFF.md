@@ -264,6 +264,18 @@ README names". Grounds: the README is a shipped, declared version just as the ha
 the copied JSON against it, so no check is loosened. Wan 2.2 and MiniMax H3, which use the handbook, stay correct.
 (The coordinator's relay called this D19; D19 was already the likeness fact, so it is D21 here.)
 
+**D22. Policy 0.1.6: the unclear stops point at ComfyUI's log, not a console** (2026-10-14, on Wan Animate 2's request
+through the Weekly adoption check thread). The three "unclear" sentences (the request's, and the output's image and
+video wordings) ended "the console line says why", and Wan Animate 2's chat shows them to the buyer word for word,
+who has no console. Accepted, their first option: all three now end "If it stops again, ComfyUI's log says why."
+Grounds: messages only, so no stop and no fail-closed behaviour changes; "ComfyUI's log" is right for an operator and
+readable for a buyer, so every buyer-facing pack gains it instead of each rewording on its own (MiniMax H3's entry
+rewording to "the server log" stays allowed). Not taken: their second option, an operator-only field, because it
+changes the file's shape for every adopter. Version: main was already 0.1.5 (D20) when this was asked, so it ships
+as 0.1.6, and PR #22 renumbers to the next free version when it rebases. `CHANGED_IN` lists both unclear names
+under 0.1.6, so a pack that copied the old ending passes until it re-derives;
+`test_unclear_request_says_reword_not_rerun` holds the new ending.
+
 **D9. Real-photo edits stay on ✅ Consent; the policy is not changed to hold them** (2026-10-03, on the storefront
 orchestrator's report, relayed by the coordinator, that `eroscraft/CLAUDE.md` rule 3 holds explicit real-photo edits
 until "Consent in person" ships). Rule 3 says the opposite: "An explicit edit of a real photo runs on ✅ Consent
