@@ -52,7 +52,7 @@ prompt in the file. Each fact is a yes/no question where "yes" is unsafe:
 | `minor` | the words and the rewrite | 1 |
 | `well_known_real_person` | the words and the rewrite | 2 |
 | `anyone_under_18` | every input photo or clip, and the output | 1 |
-| `famous_person_in_image` | every input photo or clip | 2 |
+| `famous_person_in_image` | every input photo or clip, and any generated picture a later stage uses as its reference | 2 |
 
 **What is measured, and what is not.** On 2026-09-11, with a Qwen3-VL 4B: the two text facts scored 0 false
 negatives and 0 false positives over a 12-prompt set, and the age question caught 6 of 6 minors on generated stills,

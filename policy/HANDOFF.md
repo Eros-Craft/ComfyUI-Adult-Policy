@@ -222,6 +222,20 @@ workspace). So the overcall also lands on generated pictures, not only on upload
 feeds a generated picture back in as an input. The decision is unchanged, and the limit line in `POLICY.md` and the
 README now covers polished portraits of ordinary people, uploaded or generated.
 
+**D18. A generated picture that a later stage uses as its reference is still asked about a famous face** (the
+coordinator's decision, 2026-10-14, under the owner-away mandate). The Wan Animate 2 coordinator asked whether node
+81, the picture check on the cast picture Qwen-Image-Edit-2511 makes, may drop `famous_person_in_image`. That picture
+is built from source photos already checked at nodes 13, 63 and 64, plus the typed words. Their ground was the
+fact's scope in the file ("Asked of every photo or clip the person adds, not of the output"), and node 81 gets the same
+confident "famous: yes" as D17. The answer is no: node 81 keeps both facts. A generated picture that a later stage
+uses as its reference is a reference the pipeline adds, not output, so the fact applies to it, and a pack may always
+check more strictly than the minimum. Dropping the check would remove the only guard against the edit model making
+a real person's likeness from the typed words. A check of the typed words for a name or likeness before the edit is
+welcome as an extra stop, never as a replacement. Under D17, false stops are reduced only on the judge's side, by
+something that can only add stops, and each "yes" at node 81 is logged as a D17 measurement. `POLICY.md`'s fact table
+now names such a picture. Nothing is widened. The same words go into the fact's text in the file with the next
+version bump, whichever version PR #22 lands, beside D16's `measured` string.
+
 **D9. Real-photo edits stay on ✅ Consent; the policy is not changed to hold them** (2026-10-03, on the storefront
 orchestrator's report, relayed by the coordinator, that `eroscraft/CLAUDE.md` rule 3 holds explicit real-photo edits
 until "Consent in person" ships). Rule 3 says the opposite: "An explicit edit of a real photo runs on ✅ Consent
