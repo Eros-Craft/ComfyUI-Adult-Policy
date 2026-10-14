@@ -296,6 +296,13 @@ def test_likeness_examples_are_labelled_and_safe_for_work():
     assert "a tall woman with red hair" in ok                   # the plain case the request named
 
 
+def test_the_file_points_at_no_records():
+    """The file's words ship inside every workflow, whose own rules refuse a pointer into this repository's records
+    (Qwen 2.1's derive stopped on "(HANDOFF D17)" in 0.1.4). Records stay in HANDOFF.md."""
+    text = (HERE / ap.FILE_NAME).read_text(encoding="utf-8")
+    assert not re.search(r"(?i)handoff|\bD\d+\b|PR #\d+", text)
+
+
 def test_document_names_the_file_version():
     first = (HERE / "POLICY.md").read_text(encoding="utf-8").split("Version ", 1)[1]
     assert first.startswith(RAW["version"] + ","), "POLICY.md and the file name different versions"

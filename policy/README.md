@@ -36,7 +36,8 @@ stopped 1 of 2 distinct photos (2026-10-10, `HANDOFF.md` D17). Known limit: a po
 person, uploaded or generated, can be stopped as famous. Version 0.1.4 adds `likeness_of_real_person`, asked of the
 words and the rewrite beside the name check: words that point at a real person without naming them stop. It only
 adds stops, it is unmeasured, and its `examples` are the labelled set a pack measures against; a pack asks it from
-its next release. "Not yet" means that workflow's pack has not been compared with the file, so its checkpoints above are a first
+its next release. Version 0.1.5 drops a pointer to this repository's records from that fact's text, since the
+file's words ship inside every workflow; no question or stop sentence changes. "Not yet" means that workflow's pack has not been compared with the file, so its checkpoints above are a first
 guess its session confirms when it adopts. A new workflow adds its own row to `workflows` in the same change that
 wires it in.
 
