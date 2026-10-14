@@ -12,6 +12,7 @@ import importlib.util
 import json
 import os
 import pathlib
+import re
 import sys
 
 sys.dont_write_bytecode = True      # a test run leaves nothing in the export to commit by mistake
@@ -173,6 +174,9 @@ def test_weakened_copies_are_refused():
     _refused(lambda d: d["rules"][1]["checked_at"].remove("inputs"))                # photos no longer checked for fame
     _refused(lambda d: d["rules"][1]["facts"].remove("famous_person_in_image"))     # checked on photos, asking nothing
     _refused(lambda d: d["messages"]["request"].pop("famous_person_in_image"))      # a photo stop with no sentence
+    _refused(lambda d: d["rules"][1]["facts"].remove("likeness_of_real_person"))    # a described likeness let through
+    _refused(lambda d: d["rules"][0]["facts"].remove("minor"))                      # the words no longer asked for age
+    _refused(lambda d: d["messages"]["rewrite"].pop("likeness_of_real_person"))     # a rewrite stop with no sentence
     _refused(lambda d: d["civitai"].update(refused_words=[]))                       # the picker unguarded
     _refused(lambda d: d.update(schema=2))                                          # a schema this reader can't judge
 
@@ -244,13 +248,52 @@ def test_a_famous_face_in_a_photo_is_asked():
     question; the stop names nobody, and the fact is marked unmeasured because measuring it needs photos of real
     famous people."""
     fact = next(f for f in RAW["facts"] if f["key"] == "famous_person_in_image")
-    assert fact["asked_of"] == "image" and fact["unsafe"] is True and fact["measured"].startswith("unmeasured")
+    assert fact["asked_of"] == "image" and fact["unsafe"] is True and "1 of 2" in fact["measured"]   # D17
+    assert "reference" in fact["measured"]                                         # D18
     rule = next(r for r in RAW["rules"] if r["key"] == "no_famous_real_person")
     assert "famous_person_in_image" in rule["facts"] and "inputs" in rule["checked_at"]
     assert "output" not in rule["checked_at"] and "famous_person_in_image" not in RAW["messages"]["output"]
     for media in ap.MEDIA:
         stop = ap.load(media=media).messages["request"]["famous_person_in_image"]
         assert "famous real person" in stop and "{" not in stop and "nothing was made" in stop
+
+
+LIKENESS = "likeness_of_real_person"
+
+
+def test_a_described_likeness_is_asked():
+    """0.1.4 (Wan Animate 2's request, 2026-10-14): typed words can point at a real person without naming them ("looks
+    exactly like the lead actress in X"), which `well_known_real_person` only asks about names. The fact is add-only:
+    it sits in rule 2 beside the name check, is asked of the words and the rewrite, fails closed like every fact, and
+    a copy without it is refused. Its examples are the labelled set a pack measures its checker against."""
+    fact = next(f for f in RAW["facts"] if f["key"] == LIKENESS)
+    assert fact["asked_of"] == "text" and fact["unsafe"] is True and fact["measured"].startswith("unmeasured")
+    assert "is NOT" in fact["question"]                         # an invented person's own looks are spelled out as safe
+    rule = next(r for r in RAW["rules"] if r["key"] == "no_famous_real_person")
+    assert {"well_known_real_person", LIKENESS} <= set(rule["facts"]) and {"request", "rewrite"} <= set(rule["checked_at"])
+    for media in ap.MEDIA:
+        pol = ap.load(media=media)
+        for stop in (pol.messages["request"][LIKENESS], pol.messages["rewrite"][LIKENESS]):
+            assert "real person's likeness" in stop and "nothing was made" in stop and "{" not in stop
+
+
+def test_likeness_examples_are_labelled_and_safe_for_work():
+    """Ordinary descriptions are labelled to pass and real-likeness descriptions to stop, with nothing in either list
+    a test may not carry: no name, no minor, nothing past lingerie and swimwear."""
+    ex = next(f for f in RAW["facts"] if f["key"] == LIKENESS)["examples"]
+    stop, ok = ex["stop"], ex["pass"]
+    assert stop and ok and not set(stop) & set(ok)
+    pol = ap.load(media="image")
+    minors = {w for w in pol.refused_word_list if w not in ("celebrity", "celeb", "lookalike", "look-alike",
+                                                            "likeness", "non-consensual", "nonconsensual", "rape")}
+    explicit = ("nude", "naked", "topless", "sheer", "see-through", "sex")
+    for text in stop + ok:
+        found = pol.refused_words(text)
+        assert found not in minors, (text, found)
+        assert not any(re.search(r"(?<![a-z])%s(?![a-z])" % w, text, re.I) for w in explicit), text
+        assert not re.search(r"\b[A-Z][a-z]+ [A-Z][a-z]+\b", text), ("reads like a name", text)
+    assert all(re.search(r"(?i)\b(real|current|last|this year|won|headlined|lead)\b", t) for t in stop)
+    assert "a tall woman with red hair" in ok                   # the plain case the request named
 
 
 def test_document_names_the_file_version():

@@ -33,7 +33,10 @@ lists each version's changed words, and every other word must still be equal. Ve
 `famous_person_in_image`, asked of every photo or clip the person adds in the same call as `anyone_under_18`; it stops
 nothing until a pack's engine asks it. It is never measured on famous people, and on ordinary adults it falsely
 stopped 1 of 2 distinct photos (2026-10-10, `HANDOFF.md` D17). Known limit: a polished portrait of an ordinary
-person, uploaded or generated, can be stopped as famous. "Not yet" means that workflow's pack has not been compared with the file, so its checkpoints above are a first
+person, uploaded or generated, can be stopped as famous. Version 0.1.4 adds `likeness_of_real_person`, asked of the
+words and the rewrite beside the name check: words that point at a real person without naming them stop. It only
+adds stops, it is unmeasured, and its `examples` are the labelled set a pack measures against; a pack asks it from
+its next release. "Not yet" means that workflow's pack has not been compared with the file, so its checkpoints above are a first
 guess its session confirms when it adopts. A new workflow adds its own row to `workflows` in the same change that
 wires it in.
 
