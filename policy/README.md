@@ -37,7 +37,9 @@ person, uploaded or generated, can be stopped as famous. Version 0.1.4 adds `lik
 words and the rewrite beside the name check: words that point at a real person without naming them stop. It only
 adds stops, it is unmeasured, and its `examples` are the labelled set a pack measures against; a pack asks it from
 its next release. Version 0.1.5 drops a pointer to this repository's records from that fact's text, since the
-file's words ship inside every workflow; no question or stop sentence changes. "Not yet" means that workflow's pack has not been compared with the file, so its checkpoints above are a first
+file's words ship inside every workflow; no question or stop sentence changes. Version 0.1.6 ends the three
+"unclear" stops with "If it stops again, ComfyUI's log says why." instead of pointing at a console line, since a
+buyer sees these sentences word for word and has no console; a workflow may still reword them in its entry. "Not yet" means that workflow's pack has not been compared with the file, so its checkpoints above are a first
 guess its session confirms when it adopts. A new workflow adds its own row to `workflows` in the same change that
 wires it in.
 
