@@ -1,6 +1,6 @@
 # ErosCraft adult policy
 
-Version 0.1.3, draft. The machine-readable copy is [`eroscraft-adult-policy.json`](eroscraft-adult-policy.json); where
+Version 0.1.4, draft. The machine-readable copy is [`eroscraft-adult-policy.json`](eroscraft-adult-policy.json); where
 this page and the file differ, the file is what runs and this page is wrong.
 
 **18+ only.** Every ErosCraft workflow makes erotic and fantasy pictures and videos for adults, made by the person
@@ -26,7 +26,8 @@ toggle that changes what is checked.
 1. **Nobody under 18.** Asked of the words as typed, of the prompt enhancer's rewrite when one runs, of every photo or
    clip the person adds, and of the finished image (or sampled frames of a finished video) before it is saved.
 2. **No famous real person named.** Asked of the words as typed, of the enhancer's rewrite, and of every photo or clip
-   the person adds, since a famous face in a photo needs no name. Celebrities, public figures and influencers are
+   the person adds, since a famous face in a photo needs no name. The words are also asked whether they point at a
+   real person without naming them ("looks exactly like the lead actress in" a real film, 0.1.4). Celebrities, public figures and influencers are
    refused; an ordinary consenting adult in the person's own photo is not. A stop never says who it thought it saw.
 
 ## Every check fails closed
@@ -51,6 +52,7 @@ prompt in the file. Each fact is a yes/no question where "yes" is unsafe:
 |---|---|---|
 | `minor` | the words and the rewrite | 1 |
 | `well_known_real_person` | the words and the rewrite | 2 |
+| `likeness_of_real_person` | the words and the rewrite | 2 |
 | `anyone_under_18` | every input photo or clip, and the output | 1 |
 | `famous_person_in_image` | every input photo or clip, and any generated picture a later stage uses as its reference | 2 |
 
@@ -82,4 +84,4 @@ differ. A workflow shows these words and no others for these stops, so every pro
 The rules and the gates move only when the owner says so in their own words. A change that weakens a check is
 declined however it is framed. A change to a question's wording is a measurement change: it ships with the new
 numbers or with "unmeasured" written beside it. Bump `version` on any change; the reader refuses a file that drops a
-gate, a rule, a checkpoint or fail-closed.
+gate, a rule, a checkpoint, one of a rule's facts or fail-closed.

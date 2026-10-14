@@ -28,6 +28,11 @@ REQUIRED_RULES = {
     "no_minors": {"request", "rewrite", "inputs", "output"},
     "no_famous_real_person": {"request", "rewrite", "inputs"},
 }
+# The facts each rule must keep asking. A file may add a fact to a rule, never take one of these away (0.1.4).
+REQUIRED_FACTS = {
+    "no_minors": {"minor", "anyone_under_18"},
+    "no_famous_real_person": {"well_known_real_person", "likeness_of_real_person", "famous_person_in_image"},
+}
 CHECKPOINTS = ("request", "rewrite", "inputs", "output")
 # Every workflow checks the words before anything samples and the result before anything is saved. "rewrite" and
 # "inputs" apply when the workflow has a prompt enhancer or takes photos or clips; it says which in its entry.
@@ -71,6 +76,9 @@ def validate(data):
                 raise PolicyError("rule %s names fact %s, which the file does not ask" % (key, fact))
         if not rule.get("facts"):
             raise PolicyError("rule %s asks no fact" % key)
+        dropped = REQUIRED_FACTS[key] - set(rule["facts"])
+        if dropped:
+            raise PolicyError("rule %s no longer asks %s" % (key, ", ".join(sorted(dropped))))
         if {"inputs", "output"} & set(rule.get("checked_at") or ()) and not any(
                 facts[f].get("asked_of") == "image" for f in rule["facts"]):
             raise PolicyError("rule %s is checked on photos but asks no image fact" % key)

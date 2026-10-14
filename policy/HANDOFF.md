@@ -236,6 +236,21 @@ something that can only add stops, and each "yes" at node 81 is logged as a D17 
 now names such a picture. Nothing is widened. The same words go into the fact's text in the file with the next
 version bump, whichever version PR #22 lands, beside D16's `measured` string.
 
+**D19. Policy 0.1.4: words that point at a real person without naming them stop** (the coordinator's decision,
+2026-10-14, under the owner-away mandate, on Wan Animate 2's request). `well_known_real_person` asks only whether the
+words name a famous person, so "looks exactly like the lead actress in" a real film passed. The new text fact
+`likeness_of_real_person` sits in rule 2 beside it and is asked of the words and the rewrite. It only adds stops,
+fails closed like every fact, has its own request and rewrite sentences, and is unmeasured. Its `examples` hold four
+real-likeness descriptions labelled stop and five ordinary ones labelled pass ("a tall woman with red hair"), with no
+name, no minor and nothing past swimwear: they are the set a pack measures its checker against, because this
+repository runs no checker. The reader now refuses a copy whose rule drops any of its required facts
+(`REQUIRED_FACTS`), which also closes a gap: dropping `minor` from rule 1 used to pass. Grounds: strictly tighter,
+which `POLICY.md` allows, and rule 2's own words are unchanged. The same bump carries D16's `measured` figure and D18's
+scope words into `famous_person_in_image`. The coordinator asked to fold this into PR #22's 0.1.4. Taking #22's
+commit into this branch was refused by the permission check, so this ships on its own as 0.1.4, and #22 renumbers to
+0.1.5 when it rebases. Wan Animate 2 asks the fact from its next release. `test_a_described_likeness_is_asked` and
+`test_likeness_examples_are_labelled_and_safe_for_work` hold it.
+
 **D9. Real-photo edits stay on ✅ Consent; the policy is not changed to hold them** (2026-10-03, on the storefront
 orchestrator's report, relayed by the coordinator, that `eroscraft/CLAUDE.md` rule 3 holds explicit real-photo edits
 until "Consent in person" ships). Rule 3 says the opposite: "An explicit edit of a real photo runs on ✅ Consent
