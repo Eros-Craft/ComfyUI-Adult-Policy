@@ -251,6 +251,11 @@ commit into this branch was refused by the permission check, so this ships on it
 0.1.5 when it rebases. Wan Animate 2 asks the fact from its next release. `test_a_described_likeness_is_asked` and
 `test_likeness_examples_are_labelled_and_safe_for_work` hold it.
 
+**D20. Policy 0.1.5: the file points at no records** (2026-10-14). Qwen 2.1's derive refused 0.1.4 because the famous-face
+fact's `measured` text ended "(HANDOFF D17)": the file's words ship inside every workflow, and each workflow's
+shipped-text rule refuses a pointer into this repository's records. 0.1.5 drops the pointer and changes nothing else.
+`test_the_file_points_at_no_records` holds it.
+
 **D9. Real-photo edits stay on ✅ Consent; the policy is not changed to hold them** (2026-10-03, on the storefront
 orchestrator's report, relayed by the coordinator, that `eroscraft/CLAUDE.md` rule 3 holds explicit real-photo edits
 until "Consent in person" ships). Rule 3 says the opposite: "An explicit edit of a real photo runs on ✅ Consent

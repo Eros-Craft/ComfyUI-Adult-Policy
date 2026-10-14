@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "name": "ErosCraft adult policy",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "status": "draft",
   "document": "POLICY.md",
 
@@ -81,7 +81,7 @@
       "asked_of": "image",
       "question": "is anyone in this image a recognisable famous or well-known real person (a celebrity, public figure or influencer)? (An ordinary person who is not famous is NOT.)",
       "unsafe": true,
-      "measured": "2026-10-10, Qwen3-VL 4B on an RTX PRO 6000, raw answers read: falsely stopped 1 of 2 distinct ordinary-adult photos, and one cast picture a workflow generated itself (HANDOFF D17). Never measured on famous people, which no ErosCraft test makes or uses. Asked of every photo or clip the person adds, and of any generated picture a later stage uses as its reference; not of the output."
+      "measured": "2026-10-10, Qwen3-VL 4B on an RTX PRO 6000, raw answers read: falsely stopped 1 of 2 distinct ordinary-adult photos, and one cast picture a workflow generated itself. Never measured on famous people, which no ErosCraft test makes or uses. Asked of every photo or clip the person adds, and of any generated picture a later stage uses as its reference; not of the output."
     },
     {
       "key": "likeness_of_real_person",
