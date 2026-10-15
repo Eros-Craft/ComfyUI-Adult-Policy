@@ -276,6 +276,16 @@ as 0.1.6, and PR #22 renumbers to the next free version when it rebases. `CHANGE
 under 0.1.6, so a pack that copied the old ending passes until it re-derives;
 `test_unclear_request_says_reword_not_rerun` holds the new ending.
 
+**D23. Policy 0.1.7: the checker's reply form names no placeholder** (2026-10-15, on Wan Animate 2's request through
+its coordinator). The system prompt said "in the form 'key: yes' or 'key: no'", and in Wan Animate 2's T2 (case 22,
+the form's output check asking only `anyone_under_18`) the judge replied "key: no", copying the placeholder; the
+fail-closed read rightly took it as no answer and nothing was saved. Accepted: the prompt now asks for "one line per
+question, starting with its label exactly as given, then a colon, a space and yes or no". Grounds: the reply form a
+pack parses is unchanged, every read stays fail-closed, and no question or stop sentence moves; it only removes a
+word a model can copy. Unmeasured as a whole prompt until an adopter's next live run (Wan Animate 2's PR #70 already
+names the labels in its own user prompt, which is that run). `CHANGED_IN` lists "checker system" under 0.1.7, so a
+pack that copied the old prompt passes until it re-derives.
+
 **D9. Real-photo edits stay on ✅ Consent; the policy is not changed to hold them** (2026-10-03, on the storefront
 orchestrator's report, relayed by the coordinator, that `eroscraft/CLAUDE.md` rule 3 holds explicit real-photo edits
 until "Consent in person" ships). Rule 3 says the opposite: "An explicit edit of a real photo runs on ✅ Consent

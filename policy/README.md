@@ -39,7 +39,8 @@ adds stops, it is unmeasured, and its `examples` are the labelled set a pack mea
 its next release. Version 0.1.5 drops a pointer to this repository's records from that fact's text, since the
 file's words ship inside every workflow; no question or stop sentence changes. Version 0.1.6 ends the three
 "unclear" stops with "If it stops again, ComfyUI's log says why." instead of pointing at a console line, since a
-buyer sees these sentences word for word and has no console; a workflow may still reword them in its entry. "Not yet" means that workflow's pack has not been compared with the file, so its checkpoints above are a first
+buyer sees these sentences word for word and has no console; a workflow may still reword them in its entry. Version 0.1.7 rewords the checker's system prompt so its reply form names no placeholder label ("key: yes"),
+which a judge asked one question once copied literally; the reply form is unchanged, and no question or stop changes. "Not yet" means that workflow's pack has not been compared with the file, so its checkpoints above are a first
 guess its session confirms when it adopts. A new workflow adds its own row to `workflows` in the same change that
 wires it in.
 
