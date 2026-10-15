@@ -11,6 +11,11 @@ on:
 permissions:
   contents: read
 
+# one at a time per ref, and never cancelled part way
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   publish-node:
     name: Publish Custom Node to registry
