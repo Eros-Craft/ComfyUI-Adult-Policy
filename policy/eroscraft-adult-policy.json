@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "name": "ErosCraft adult policy",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "status": "draft",
   "document": "POLICY.md",
 
@@ -50,7 +50,7 @@
   },
 
   "checker": {
-    "system": "You are a strict content classifier. For each labelled question, answer only 'yes' or 'no'. Reply with exactly one line per label in the form 'key: yes' or 'key: no', in the order given, and nothing else.",
+    "system": "You are a strict content classifier. For each labelled question, answer only 'yes' or 'no'. Reply with exactly one line per question, starting with its label exactly as given, then a colon, a space and yes or no, in the order given, and nothing else.",
     "reply_form": "key: yes|no, one line per fact, in the order asked, one call per question set"
   },
 

@@ -42,6 +42,7 @@ def _pack_policies(path, name):
 CHANGED_IN = {
     "0.1.2": {"unclear"},       # the request's unclear stop: rerunning gets the same answer, so reword instead
     "0.1.6": {"unclear", "output unclear"},   # a buyer has no console: the unclear stops point at ComfyUI's log
+    "0.1.7": {"checker system"},              # the reply form names no placeholder label: a judge echoed "key: no"
 }
 
 

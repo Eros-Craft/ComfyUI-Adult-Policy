@@ -1,6 +1,6 @@
 # ErosCraft adult policy
 
-Version 0.1.6, draft. The machine-readable copy is [`eroscraft-adult-policy.json`](eroscraft-adult-policy.json); where
+Version 0.1.7, draft. The machine-readable copy is [`eroscraft-adult-policy.json`](eroscraft-adult-policy.json); where
 this page and the file differ, the file is what runs and this page is wrong.
 
 **18+ only.** Every ErosCraft workflow makes erotic and fantasy pictures and videos for adults, made by the person
