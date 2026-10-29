@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "name": "ErosCraft adult policy",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "status": "draft",
   "document": "POLICY.md",
 
@@ -228,6 +228,13 @@
       "checkpoints": ["request", "inputs", "output"],
       "civitai_picker": false,
       "words_checked": null
+    },
+    "eroscraft-image-character-moss-image": {
+      "media": "image",
+      "pack": null,
+      "checkpoints": ["request", "inputs", "output"],
+      "civitai_picker": false,
+      "words_checked": "2026-10-29"
     }
   }
 }

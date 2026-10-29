@@ -286,6 +286,13 @@ word a model can copy. Unmeasured as a whole prompt until an adopter's next live
 names the labels in its own user prompt, which is that run). `CHANGED_IN` lists "checker system" under 0.1.7, so a
 pack that copied the old prompt passes until it re-derives.
 
+**D24. Policy 0.1.8: the Image Character workflow is listed** (2026-10-29, on the owner's approval relayed by the
+Image Character coordinator). `eroscraft-image-character-moss-image` trains a character LoRA from a zip of photos and
+renders a character sheet. It has no ComfyUI pack: its FastAPI job server (`pipeline/guard.py`) reads a byte copy of
+`policy/` and asks request (name and trigger word), inputs (every kept training photo) and output (every sheet panel).
+Until now it passed `media="image"` itself because it was unlisted. No gate, rule, question or stop sentence moves, so
+`CHANGED_IN` gains nothing; words compared equal by byte copy on 2026-10-29.
+
 **D9. Real-photo edits stay on ✅ Consent; the policy is not changed to hold them** (2026-10-03, on the storefront
 orchestrator's report, relayed by the coordinator, that `eroscraft/CLAUDE.md` rule 3 holds explicit real-photo edits
 until "Consent in person" ships). Rule 3 says the opposite: "An explicit edit of a real photo runs on ✅ Consent
