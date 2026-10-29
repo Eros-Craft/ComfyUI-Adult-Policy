@@ -26,6 +26,7 @@ its module folder instead (Qwen 2.1 does, since its 1.4.0 source).
 | `eroscraft-image-creator-krea-2` | image | ComfyUI-Krea2-Adult-Policy | request, rewrite, inputs, output | not yet |
 | `eroscraft-character-creator-krea-2` | image | ComfyUI-Krea2CC-Gate | request, inputs, output | not yet |
 | `eroscraft-image-creator-anima` | image | none yet (a stub) | request, inputs, output | not yet |
+| `eroscraft-image-character-moss-image` | image | none (its job server reads a byte copy of this folder) | request, inputs, output | 2026-10-29, equal (byte copy) |
 
 Version 0.1.2 rewords the request's "unclear" stop (rerunning gets the same answer, so it asks for a reworded request).
 A pack that copied its words before then shows the old sentence until it re-derives; `CHANGED_IN` in `test_policy.py`
@@ -40,7 +41,7 @@ its next release. Version 0.1.5 drops a pointer to this repository's records fro
 file's words ship inside every workflow; no question or stop sentence changes. Version 0.1.6 ends the three
 "unclear" stops with "If it stops again, ComfyUI's log says why." instead of pointing at a console line, since a
 buyer sees these sentences word for word and has no console; a workflow may still reword them in its entry. Version 0.1.7 rewords the checker's system prompt so its reply form names no placeholder label ("key: yes"),
-which a judge asked one question once copied literally; the reply form is unchanged, and no question or stop changes. "Not yet" means that workflow's pack has not been compared with the file, so its checkpoints above are a first
+which a judge asked one question once copied literally; the reply form is unchanged, and no question or stop changes. Version 0.1.8 lists the Image Character workflow (`eroscraft-image-character-moss-image`), which reads a byte copy of this folder in its job server; no gate, rule, question or stop changes. "Not yet" means that workflow's pack has not been compared with the file, so its checkpoints above are a first
 guess its session confirms when it adopts. A new workflow adds its own row to `workflows` in the same change that
 wires it in.
 
