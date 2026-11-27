@@ -293,6 +293,17 @@ renders a character sheet. It has no ComfyUI pack: its FastAPI job server (`pipe
 Until now it passed `media="image"` itself because it was unlisted. No gate, rule, question or stop sentence moves, so
 `CHANGED_IN` gains nothing; words compared equal by byte copy on 2026-10-29.
 
+**D25. Policy 0.1.9: the workflow keys take the repositories' names of 2026-11-21** (the owner's naming,
+`eroscraft-<type>-<role>-<model>` with the roles character, generator and swapper, applied here 2026-11-27).
+`eroscraft-image-creator-qwen-2.1` is now `eroscraft-image-generator-qwen-2.1`, `eroscraft-video-creator-wan-2.2` is
+`eroscraft-video-swapper-wan-animate-2` (that repository's name since 2026-10-15; its pack loaded the old key),
+`eroscraft-video-creator-minimax-h3` is `eroscraft-video-generator-minimax-h3`, `eroscraft-image-creator-krea-2` is
+`eroscraft-image-generator-krea-2`, `eroscraft-character-creator-krea-2` is `eroscraft-image-character-krea-2`, and
+`eroscraft-image-creator-anima` is `eroscraft-image-generator-anima`. Each entry's contents, every gate, rule,
+question and stop sentence are unchanged, so `CHANGED_IN` gains nothing, and `adult_policy.py` is byte for byte the
+same. An adopter changes its `load()` key in the same change that re-derives 0.1.9. The dated entries above keep the
+names of their day. `test_workflow_keys_follow_the_naming` holds it.
+
 **D9. Real-photo edits stay on ✅ Consent; the policy is not changed to hold them** (2026-10-03, on the storefront
 orchestrator's report, relayed by the coordinator, that `eroscraft/CLAUDE.md` rule 3 holds explicit real-photo edits
 until "Consent in person" ships). Rule 3 says the opposite: "An explicit edit of a real photo runs on ✅ Consent
