@@ -96,7 +96,7 @@ def test_file_loads_for_both_media():
 
 def test_matches_qwen21_pack():
     mod = _pack_policies(HERE.parent / "qwen21_adult_policy" / "policies.py", "qwen21_policies_under_test")
-    _matches(ap.load("eroscraft-image-creator-qwen-2.1"), mod)
+    _matches(ap.load("eroscraft-image-generator-qwen-2.1"), mod)
     civitai = _module("qwen21_civitai_under_test", HERE.parent / "qwen21_adult_policy" / "civitai.py")
     assert tuple(RAW["civitai"]["refused_flags"]) == civitai.REFUSED_FLAGS
     for flag, reason in RAW["civitai"]["refused_flags"].items():
@@ -109,10 +109,10 @@ def test_matches_wan22_pack():
     if not path:
         print("skip: WAN22_POLICIES is unset (the Wan 2.2 pack lives in the private workspace)")
         return
-    _matches(ap.load("eroscraft-video-creator-wan-2.2"), _pack_policies(path, "wan22_policies_under_test"))
+    _matches(ap.load("eroscraft-video-swapper-wan-animate-2"), _pack_policies(path, "wan22_policies_under_test"))
 
 
-H3 = "eroscraft-video-creator-minimax-h3"
+H3 = "eroscraft-video-generator-minimax-h3"
 # The five stop sentences MiniMax H3 words its own way (compared 2026-10-03). Every other word it shows is the file's.
 H3_REWORDED = {("request", "minor"), ("request", "anyone_under_18"), ("output", "anyone_under_18"),
                ("unclear", "request"), ("unclear", "output")}
@@ -184,7 +184,7 @@ def test_weakened_copies_are_refused():
 
 
 def test_weakened_workflow_entries_are_refused():
-    qwen = "eroscraft-image-creator-qwen-2.1"
+    qwen = "eroscraft-image-generator-qwen-2.1"
     _refused(lambda d: d["workflows"][qwen].update(gates=[]))                      # a workflow touching a gate
     _refused(lambda d: d["workflows"][qwen].update(rules=[]))                      # or a rule
     _refused(lambda d: d["workflows"][qwen].update(fail_closed={"required": False}))
@@ -206,30 +206,38 @@ def test_every_workflow_loads():
         assert pol.messages["request"]["minor"] == (reworded or RAW["messages"]["request"]["minor"])
 
 
+def test_workflow_keys_follow_the_naming():
+    """A workflow's key is its repository's name, eroscraft-<type>-<role>-<model>, with the roles character,
+    generator and swapper and no "creator" (the owner's naming, 2026-11-21; 0.1.9). The type is the entry's medium."""
+    for name, entry in RAW["workflows"].items():
+        m = re.fullmatch(r"eroscraft-(image|video)-(character|generator|swapper)-[a-z0-9][a-z0-9.-]*", name)
+        assert m and m.group(1) == entry["media"], name
+
+
 def test_a_workflow_may_reword_a_stop_and_nothing_else():
     data = copy.deepcopy(RAW)
-    data["workflows"]["eroscraft-video-creator-wan-2.2"]["messages"] = {
+    data["workflows"]["eroscraft-video-swapper-wan-animate-2"]["messages"] = {
         "output": {"anyone_under_18": "A frame reads as someone under 18, so the clip was not saved."}}
     path = HERE / "_reworded_under_test.json"
     try:
         path.write_text(json.dumps(data), encoding="utf-8")
-        pol = ap.load("eroscraft-video-creator-wan-2.2", path=path)
+        pol = ap.load("eroscraft-video-swapper-wan-animate-2", path=path)
         assert pol.messages["output"]["anyone_under_18"].startswith("A frame reads")
         assert pol.messages["request"]["minor"] == RAW["messages"]["request"]["minor"]
-        assert ap.load("eroscraft-image-creator-qwen-2.1", path=path).messages == ap.load(
-            "eroscraft-image-creator-qwen-2.1").messages
+        assert ap.load("eroscraft-image-generator-qwen-2.1", path=path).messages == ap.load(
+            "eroscraft-image-generator-qwen-2.1").messages
     finally:
         path.unlink()
 
 
 def test_an_unlisted_workflow_names_its_medium():
     try:
-        ap.load("eroscraft-image-creator-new-model")
+        ap.load("eroscraft-image-generator-new-model")
     except ap.PolicyError:
         pass
     else:
         raise AssertionError("an unlisted workflow loaded without a medium")
-    assert ap.load("eroscraft-image-creator-new-model", media="video").media == "video"
+    assert ap.load("eroscraft-image-generator-new-model", media="video").media == "video"
 
 
 def test_unclear_request_says_reword_not_rerun():

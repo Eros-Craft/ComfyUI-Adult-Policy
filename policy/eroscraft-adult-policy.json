@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "name": "ErosCraft adult policy",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "status": "draft",
   "document": "POLICY.md",
 
@@ -174,21 +174,21 @@
   },
 
   "workflows": {
-    "eroscraft-image-creator-qwen-2.1": {
+    "eroscraft-image-generator-qwen-2.1": {
       "media": "image",
       "pack": "ComfyUI-Qwen21-Adult-Policy",
       "checkpoints": ["request", "rewrite", "inputs", "output"],
       "civitai_picker": true,
       "words_checked": "2026-10-03"
     },
-    "eroscraft-video-creator-wan-2.2": {
+    "eroscraft-video-swapper-wan-animate-2": {
       "media": "video",
       "pack": "ComfyUI-Wan22-Adult-Policy",
       "checkpoints": ["request", "inputs", "output"],
       "civitai_picker": false,
       "words_checked": "2026-10-03"
     },
-    "eroscraft-video-creator-minimax-h3": {
+    "eroscraft-video-generator-minimax-h3": {
       "media": "video",
       "pack": "ComfyUI-H3-Adult-Policy",
       "checkpoints": ["request", "inputs", "output"],
@@ -208,21 +208,21 @@
         }
       }
     },
-    "eroscraft-image-creator-krea-2": {
+    "eroscraft-image-generator-krea-2": {
       "media": "image",
       "pack": "ComfyUI-Krea2-Adult-Policy",
       "checkpoints": ["request", "rewrite", "inputs", "output"],
       "civitai_picker": true,
       "words_checked": null
     },
-    "eroscraft-character-creator-krea-2": {
+    "eroscraft-image-character-krea-2": {
       "media": "image",
       "pack": "ComfyUI-Krea2CC-Gate",
       "checkpoints": ["request", "inputs", "output"],
       "civitai_picker": false,
       "words_checked": null
     },
-    "eroscraft-image-creator-anima": {
+    "eroscraft-image-generator-anima": {
       "media": "image",
       "pack": null,
       "checkpoints": ["request", "inputs", "output"],
